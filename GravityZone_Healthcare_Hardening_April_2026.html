@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GravityZone Healthcare Hardened Policy — Advatek</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111827;
+  --slate:  #1f2937;
+  --mid:    #6b7280;
+  --light:  #9ca3af;
+  --border: #e5e7eb;
+  --bg:     #f9fafb;
+  --white:  #ffffff;
+  --red:    #dc2626;
+  --amber:  #d97706;
+  --green:  #16a34a;
+  --blue:   #2563eb;
+  --purple: #7c3aed;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* NAV */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-logo { flex-shrink: 0; text-decoration: none; }
+.nav-logo img { height: 26px; width: auto; display: block; }
+.nav-spacer { flex: 1; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.btn-print {
+  background: var(--dark); color: var(--white);
+  border: none; cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+.btn-print:hover { background: var(--black); }
+.nav-label { font-size: 11px; color: var(--light); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.nav-back { font-size: 11px; color: var(--mid); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; transition: color 0.15s; }
+.nav-back:hover { color: var(--dark); }
+
+/* HERO */
+.hero {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,24,42,0.8) 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 32px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 40px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white);
+  line-height: 1.1; margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+}
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.hero-chip {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  padding: 6px 14px;
+}
+.hero-chip.green { border-color: rgba(22,163,74,0.5); color: #4ade80; }
+.hero-chip.amber { border-color: rgba(217,119,6,0.5); color: #fbbf24; }
+.hero-stats { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.hero-stat {
+  text-align: right;
+  border-right: 2px solid rgba(255,255,255,0.15);
+  padding-right: 16px;
+}
+.hs-val { display: block; font-size: 36px; font-weight: 700; color: var(--white); letter-spacing: -1px; line-height: 1; }
+.hs-lbl { display: block; font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+/* PAGE */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--mid);
+  margin-bottom: 20px; margin-top: 48px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label:first-child { margin-top: 0; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-label .chip {
+  background: var(--dark); color: var(--white);
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 4px 10px;
+  white-space: nowrap;
+}
+
+/* FLAT CARD */
+.flat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+/* OVERVIEW CARD */
+.overview-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 32px;
+  margin-bottom: 0;
+}
+.overview-card p { font-size: 14px; line-height: 1.8; color: var(--slate); margin-bottom: 12px; }
+.overview-card p:last-child { margin-bottom: 0; }
+
+/* KPI GRID */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.kpi {
+  background: var(--white);
+  padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  position: relative;
+}
+.kpi::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: var(--dark);
+}
+.kpi.green::before { background: var(--green); }
+.kpi.amber::before { background: var(--amber); }
+.kpi.red::before { background: var(--red); }
+.kpi-icon { font-size: 18px; margin-bottom: 4px; }
+.kpi-val { font-size: 32px; font-weight: 700; letter-spacing: -1px; color: var(--dark); line-height: 1; }
+.kpi-lbl { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); }
+.kpi-sub { font-size: 11px; color: var(--light); }
+
+/* TABLES */
+.tbl-wrap { overflow-x: auto; }
+table.data-table { width: 100%; border-collapse: collapse; }
+table.data-table thead th {
+  background: var(--dark);
+  color: rgba(255,255,255,0.6);
+  padding: 12px 16px;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  text-align: left;
+}
+table.data-table tbody td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-size: 13px;
+}
+table.data-table tbody tr:last-child td { border-bottom: 0; }
+table.data-table tbody tr:hover td { background: var(--bg); }
+
+/* BADGES */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  border: 1px solid;
+}
+.b-on     { border-color: #bbf7d0; color: var(--green); background: #f0fdf4; }
+.b-off    { border-color: #e5e7eb; color: var(--mid);   background: var(--bg); }
+.b-block  { border-color: #fca5a5; color: var(--red);   background: #fef2f2; }
+.b-allow  { border-color: #bbf7d0; color: var(--green); background: #f0fdf4; }
+.b-warn   { border-color: #fcd34d; color: var(--amber); background: #fffbeb; }
+.b-kill   { border-color: #fca5a5; color: var(--red);   background: #fef2f2; }
+.b-aggressive { border-color: #c7d2fe; color: #4338ca; background: #eef2ff; }
+.b-custom { border-color: #ddd6fe; color: var(--purple); background: #f5f3ff; }
+
+/* DARK PANEL */
+.dark-panel {
+  background: var(--dark);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.dark-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.dark-panel-inner { position: relative; z-index: 1; }
+.dark-panel-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+.dark-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.dark-item {
+  background: rgba(255,255,255,0.04);
+  padding: 16px 20px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.dark-item-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.dark-item-title { font-size: 12px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.dark-item-sub { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+/* GAP CARDS */
+.gap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.gap-card {
+  background: var(--white);
+  padding: 24px;
+  border-left: 3px solid var(--amber);
+}
+.gap-card.red { border-left-color: var(--red); }
+.gap-card.green { border-left-color: var(--green); }
+.gap-title { font-weight: 700; font-size: 13px; color: var(--dark); margin-bottom: 6px; }
+.gap-desc { font-size: 12px; color: var(--mid); line-height: 1.6; }
+.gap-rec { font-size: 11px; color: var(--slate); font-weight: 600; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+/* NEXT STEPS */
+.steps-list { list-style: none; }
+.step-item {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--white);
+}
+.step-item:last-child { border-bottom: 0; }
+.step-num {
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: var(--dark); color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+  margin-top: 2px;
+}
+.step-content h4 { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 4px; }
+.step-content p { font-size: 12px; color: var(--mid); line-height: 1.6; }
+
+/* DEPLOYMENT BOX */
+.deploy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.deploy-card { background: var(--white); padding: 24px 28px; }
+.deploy-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.deploy-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.deploy-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--dark); }
+.deploy-item::before { content: ''; width: 6px; height: 6px; background: var(--dark); flex-shrink: 0; }
+.deploy-item.warn::before { background: var(--amber); }
+.deploy-item.off::before { background: var(--border); }
+.deploy-note { font-size: 11px; color: var(--light); margin-top: 14px; line-height: 1.6; padding-top: 12px; border-top: 1px solid var(--border); }
+
+/* CODE */
+.code-block {
+  background: var(--dark); color: #e2e8f0;
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 12px; line-height: 1.7;
+  padding: 20px 24px;
+  overflow-x: auto;
+}
+
+/* REPORT FOOTER */
+.report-footer {
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  text-align: center;
+  font-size: 11px; color: var(--light);
+  letter-spacing: 0.3px; line-height: 1.8;
+}
+
+/* PRINT */
+@media print {
+  nav, .btn-print { display: none !important; }
+  body { background: #fff; }
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .dark-panel { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .kpi::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .deploy-grid { grid-template-columns: 1fr; }
+  .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+  .hero h1 { font-size: 28px; }
+}
+@media (max-width: 600px) {
+  .nav-inner { padding: 0 16px; }
+  .hero-inner { padding: 40px 20px 36px; }
+  .page { padding: 32px 16px 48px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .dark-grid { grid-template-columns: 1fr; }
+  .gap-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">&#8592;&nbsp;Portal</a>
+      <span class="nav-label">Security Documentation</span>
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Advatek Technology Solution &mdash; Security Hardening</div>
+      <h1>GravityZone<br>Healthcare Policy</h1>
+      <div class="hero-sub">Healthcare Hardened &mdash; Configuration Reference &mdash; April 2026</div>
+      <div class="hero-chips">
+        <span class="hero-chip green">HIPAA Aligned</span>
+        <span class="hero-chip">Bitdefender GravityZone</span>
+        <span class="hero-chip">Endpoint Security</span>
+        <span class="hero-chip">Windows Workstations</span>
+        <span class="hero-chip amber">eClinicalWorks &bull; Citrix HCHB</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hs-val">8</span>
+        <span class="hs-lbl">Modules Configured</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">8</span>
+        <span class="hs-lbl">Device Classes Blocked</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">6</span>
+        <span class="hs-lbl">Protected Applications</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- OVERVIEW -->
+  <div class="section-label">Overview</div>
+  <div class="overview-card">
+    <p>This document details the configuration of the <strong>Healthcare Hardened</strong> GravityZone policy, built and validated by Advatek Technology Solution in April 2026. The policy is designed for Windows workstations operating in healthcare environments subject to HIPAA Security Rule requirements, including clients running eClinicalWorks and Homecare Homebase via Citrix.</p>
+    <p>The policy addresses the four core areas of endpoint security relevant to PHI protection: physical exfiltration prevention (Device Control), network-level threat blocking (Network Protection), real-time and behavioral malware detection (Antimalware suite), and exploit protection for clinical application processes (Advanced Anti-Exploit).</p>
+    <p>This document can be presented to clients or auditors as evidence of implemented technical safeguards under the HIPAA Security Rule (45 CFR &sect;164.312).</p>
+  </div>
+
+  <!-- KPI -->
+  <div style="margin-top: 1px;">
+    <div class="kpi-grid">
+      <div class="kpi green">
+        <div class="kpi-icon">🛡</div>
+        <div class="kpi-val">ON</div>
+        <div class="kpi-lbl">Device Control</div>
+        <div class="kpi-sub">USB, Bluetooth, portable devices blocked</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-icon">🌐</div>
+        <div class="kpi-val">ON</div>
+        <div class="kpi-lbl">Network Protection</div>
+        <div class="kpi-sub">Antiphishing, NAD, Web Traffic Scan active</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-icon">🔬</div>
+        <div class="kpi-val">ON</div>
+        <div class="kpi-lbl">Hyper Detect</div>
+        <div class="kpi-sub">Ransomware &amp; Exploits at Aggressive level</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODULE STATUS -->
+  <div class="section-label" style="margin-top: 48px;">Module Status</div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>Status</th>
+            <th>Key Configuration</th>
+            <th>HIPAA Relevance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Device Control</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>External Storage, Bluetooth, Windows Portable — Blocked</td>
+            <td>PHI exfiltration via physical media (&sect;164.312(a))</td>
+          </tr>
+          <tr>
+            <td><strong>Antimalware — On-Access</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>Custom mode; All files; Archives, Process Memory, Boot Sectors enabled</td>
+            <td>Malware protection (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>Hyper Detect</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>All categories; Ransomware &amp; Exploits at Aggressive; Actions set to Block</td>
+            <td>Advanced threat detection (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>Advanced Anti-Exploit</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>Custom apps: eClinicalWorks, Citrix, WebView2; All techniques — Kill process</td>
+            <td>Clinical app exploit protection (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>Anti-Tampering</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>Vulnerable drivers — Deny access; Callback evasion — Isolate endpoint</td>
+            <td>Security agent integrity (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>Antimalware — On-Execute</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>ATC Aggressive; Sensitive Registry — Kill process; AMSI enabled; Ransomware — Auto-recover</td>
+            <td>Execution-stage protection, ransomware recovery</td>
+          </tr>
+          <tr>
+            <td><strong>Antimalware — On-Demand</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>Nightly 2:00 AM; Full scan — Boot sectors, memory, registry, rootkits, archives</td>
+            <td>Periodic integrity verification (&sect;164.312(b))</td>
+          </tr>
+          <tr>
+            <td><strong>Network Attack Defense</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>All ATT&amp;CK categories — Block: Initial Access, Credential Access, Discovery, Lateral Movement, Crimeware</td>
+            <td>Network-level attack prevention (&sect;164.312(e))</td>
+          </tr>
+          <tr>
+            <td><strong>Antiphishing</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>Action: Block (changed from Report only); Fraud &amp; Phishing protection enabled</td>
+            <td>Credential and PHI exposure via phishing</td>
+          </tr>
+          <tr>
+            <td><strong>Web Traffic Scan</strong></td>
+            <td><span class="badge b-on">On</span></td>
+            <td>Action: Block infected websites</td>
+            <td>Malicious payload delivery prevention</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DEVICE CONTROL -->
+  <div class="section-label">Device Control <span class="chip">HIPAA Physical Safeguard</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Device Class</th>
+            <th>Permission</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>External Storage</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>Primary PHI exfiltration vector — USB drives and external HDDs</td>
+          </tr>
+          <tr>
+            <td><strong>Bluetooth</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>Wireless data transfer to personal devices; uncontrolled pairing risk</td>
+          </tr>
+          <tr>
+            <td><strong>Windows Portable</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>Smartphones and tablets connected via USB; PHI sync/transfer path</td>
+          </tr>
+          <tr>
+            <td><strong>CDROM Drive</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>No legitimate use on clinical workstations; malware delivery and exfiltration risk</td>
+          </tr>
+          <tr>
+            <td><strong>Floppy Disk Drive</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>Obsolete media; no operational justification</td>
+          </tr>
+          <tr>
+            <td><strong>IEEE 1394 (FireWire)</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>Data transfer port; not used in clinical workstation environments</td>
+          </tr>
+          <tr>
+            <td><strong>Tape Drive</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>Workstations do not use tape storage; no operational justification</td>
+          </tr>
+          <tr>
+            <td><strong>Modem</strong></td>
+            <td><span class="badge b-block">Blocked</span></td>
+            <td>No legitimate workstation use; uncontrolled network egress risk</td>
+          </tr>
+          <tr>
+            <td><strong>Printers</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Essential clinical workflow — prescription printing, chart printing</td>
+          </tr>
+          <tr>
+            <td><strong>Network Adapter</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Required for network connectivity — blocking causes full isolation</td>
+          </tr>
+          <tr>
+            <td><strong>Wireless Network Adapter</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Required for Wi-Fi connectivity</td>
+          </tr>
+          <tr>
+            <td><strong>Internal Storage</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Local hard drive — blocking breaks the operating system</td>
+          </tr>
+          <tr>
+            <td><strong>Imaging Devices</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Document scanners used heavily in healthcare (patient IDs, insurance cards, forms)</td>
+          </tr>
+          <tr>
+            <td><strong>COM/LPT Ports</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Serial connections used by some medical devices and point-of-care equipment</td>
+          </tr>
+          <tr>
+            <td><strong>IEEE 1284.4</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Parallel port printing protocol — some legacy printers in clinical environments</td>
+          </tr>
+          <tr>
+            <td><strong>SCSI Raid</strong></td>
+            <td><span class="badge b-allow">Allowed</span></td>
+            <td>Internal storage infrastructure</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NETWORK PROTECTION -->
+  <div class="section-label">Network Protection <span class="chip">Active</span></div>
+  <div class="dark-panel">
+    <div class="dark-panel-inner">
+      <div class="dark-panel-title">Configured Sub-Modules</div>
+      <div class="dark-grid">
+        <div class="dark-item">
+          <div class="dark-item-icon">🚫</div>
+          <div>
+            <div class="dark-item-title">Antiphishing — Block</div>
+            <div class="dark-item-sub">Default action changed from Report only to Block. Protection against fraud and phishing both enabled. Suspicious pages are blocked before the user can interact with them.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🔍</div>
+          <div>
+            <div class="dark-item-title">Web Traffic Scan — Block</div>
+            <div class="dark-item-sub">Scans all inbound HTTP traffic in real time. Infected websites are blocked at the connection level. Action set to Block, not Report only.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🔒</div>
+          <div>
+            <div class="dark-item-title">TLS Handshake Interception — On</div>
+            <div class="dark-item-sub">Inspects TLS SNI/handshake to block HTTPS sites by domain without requiring full SSL inspection. Users see an Access Denied page when a blocked site is accessed.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🛡</div>
+          <div>
+            <div class="dark-item-title">Network Attack Defense — Block All</div>
+            <div class="dark-item-sub">All five ATT&CK technique categories set to Block: Initial Access, Credential Access, Discovery, Lateral Movement, Crimeware. Covers SMB exploits, brute force, and lateral movement attacks.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANTIMALWARE -->
+  <div class="section-label">Antimalware Suite <span class="chip">Full Configuration</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Sub-Module</th>
+            <th>Setting</th>
+            <th>Value / Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="8"><strong>On-Access Scanning</strong></td>
+            <td>Scan mode</td>
+            <td><span class="badge b-custom">Custom</span> — All files, local and network drives</td>
+          </tr>
+          <tr>
+            <td>Process memory</td>
+            <td><span class="badge b-on">Enabled</span> — Detects in-memory and fileless threats</td>
+          </tr>
+          <tr>
+            <td>Archives</td>
+            <td><span class="badge b-on">Enabled</span> — Up to 50 MB archive size limit</td>
+          </tr>
+          <tr>
+            <td>Boot sectors</td>
+            <td><span class="badge b-on">Enabled</span></td>
+          </tr>
+          <tr>
+            <td>Keyloggers</td>
+            <td><span class="badge b-on">Enabled</span></td>
+          </tr>
+          <tr>
+            <td>PUA detection</td>
+            <td><span class="badge b-on">Enabled</span> — Action: Deny access</td>
+          </tr>
+          <tr>
+            <td>Deferred scanning</td>
+            <td><span class="badge b-on">Enabled</span> — Reduces impact during active user sessions</td>
+          </tr>
+          <tr>
+            <td>Action for infected objects</td>
+            <td><span class="badge b-on">Remediate</span></td>
+          </tr>
+          <tr>
+            <td rowspan="5"><strong>Hyper Detect</strong></td>
+            <td>Targeted attack</td>
+            <td><span class="badge b-on">Normal</span> — Action: Block</td>
+          </tr>
+          <tr>
+            <td>Suspicious files / network traffic</td>
+            <td><span class="badge b-on">Normal</span> — Action: Block</td>
+          </tr>
+          <tr>
+            <td>Exploits</td>
+            <td><span class="badge b-aggressive">Aggressive</span> — Action: Block</td>
+          </tr>
+          <tr>
+            <td>Ransomware</td>
+            <td><span class="badge b-aggressive">Aggressive</span> — Action: Block</td>
+          </tr>
+          <tr>
+            <td>Grayware</td>
+            <td><span class="badge b-on">Normal</span> — Action: Block (medical software false positive risk at Aggressive)</td>
+          </tr>
+          <tr>
+            <td rowspan="6"><strong>On-Execute (Advanced Threat Control)</strong></td>
+            <td>Detection sensitivity</td>
+            <td><span class="badge b-aggressive">Aggressive</span> — Recommended for critical systems</td>
+          </tr>
+          <tr>
+            <td>Sensitive Registry Protection</td>
+            <td><span class="badge b-kill">Kill process</span> — Protects SAM and critical registry keys from credential dumping</td>
+          </tr>
+          <tr>
+            <td>Kernel-API Monitoring</td>
+            <td><span class="badge b-on">Enabled</span> — Detects advanced threats at kernel API level</td>
+          </tr>
+          <tr>
+            <td>AMSI Security Provider</td>
+            <td><span class="badge b-on">Enabled</span> — Scans PowerShell, VBScript, JavaScript at runtime</td>
+          </tr>
+          <tr>
+            <td>Ransomware Mitigation</td>
+            <td><span class="badge b-on">Block</span> with EFS Protection enabled</td>
+          </tr>
+          <tr>
+            <td>Ransomware Recovery</td>
+            <td><span class="badge b-on">Automatic</span> — Files restored immediately without manual MSP intervention</td>
+          </tr>
+          <tr>
+            <td rowspan="2"><strong>Anti-Tampering</strong></td>
+            <td>Vulnerable drivers (Pre-Tampering)</td>
+            <td><span class="badge b-block">Deny access</span></td>
+          </tr>
+          <tr>
+            <td>Callback evasion (Post-Tampering)</td>
+            <td><span class="badge b-block">Isolate endpoint — Immediately</span> — Endpoint network access cut if agent is actively disabled</td>
+          </tr>
+          <tr>
+            <td rowspan="7"><strong>On-Demand (Nightly Scan)</strong></td>
+            <td>Schedule</td>
+            <td>Daily — All days — 02:00 AM local time</td>
+          </tr>
+          <tr>
+            <td>Priority</td>
+            <td>Low — minimizes performance impact on workstations</td>
+          </tr>
+          <tr>
+            <td>Missed scan behavior</td>
+            <td>Run as soon as possible after system comes online</td>
+          </tr>
+          <tr>
+            <td>Scan targets</td>
+            <td>All Local Drives, Removable Drives</td>
+          </tr>
+          <tr>
+            <td>Options enabled</td>
+            <td>Boot sectors, Process memory, Scan registry, Rootkits, Keyloggers, Archives, PUA, New and changed files only</td>
+          </tr>
+          <tr>
+            <td>Action for infected objects</td>
+            <td><span class="badge b-on">Remediate</span></td>
+          </tr>
+          <tr>
+            <td>Action for PUA</td>
+            <td><span class="badge b-block">Quarantine</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ADVANCED ANTI-EXPLOIT -->
+  <div class="section-label">Advanced Anti-Exploit — Protected Applications <span class="chip">Custom</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Application</th>
+            <th>Process Names</th>
+            <th>Detection Response</th>
+            <th>Verification Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>eClinicalWorks</strong></td>
+            <td><code>WinProjectE.exe</code></td>
+            <td><span class="badge b-kill">Kill process</span></td>
+            <td>Confirmed via <code>tasklist</code> on live eClinicalWorks workstation (Cardiovascular Physicians of Memphis)</td>
+          </tr>
+          <tr>
+            <td><strong>eClinicalWorks URL Launcher</strong></td>
+            <td><code>eCWUrlLaunch.exe</code></td>
+            <td><span class="badge b-kill">Kill process</span></td>
+            <td>Confirmed via <code>tasklist</code> — helper process for protocol link handling</td>
+          </tr>
+          <tr>
+            <td><strong>Microsoft Edge WebView2</strong></td>
+            <td><code>msedgewebview2.exe</code></td>
+            <td><span class="badge b-kill">Kill process</span></td>
+            <td>Confirmed as ECW child process via <code>wmic process get parentprocessid</code> — parent PIDs matched WinProjectE.exe instances</td>
+          </tr>
+          <tr>
+            <td><strong>Citrix Receiver</strong></td>
+            <td><code>Receiver.exe</code></td>
+            <td><span class="badge b-kill">Kill process</span></td>
+            <td>Confirmed via <code>tasklist</code> and <code>wmic ExecutablePath like '%Citrix%'</code> on HCHB Citrix client workstation</td>
+          </tr>
+          <tr>
+            <td><strong>Citrix Session Launcher</strong></td>
+            <td><code>wfcrun32.exe</code></td>
+            <td><span class="badge b-kill">Kill process</span></td>
+            <td>Confirmed via <code>wmic ExecutablePath like '%Citrix%'</code> — ICA Client path</td>
+          </tr>
+          <tr>
+            <td><strong>Citrix Connection Center</strong></td>
+            <td><code>concentr.exe</code></td>
+            <td><span class="badge b-kill">Kill process</span></td>
+            <td>Confirmed via <code>wmic ExecutablePath like '%Citrix%'</code> — manages active sessions</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div style="margin-top: 16px; padding: 16px 20px; background: var(--white); border: 1px solid var(--border); font-size: 12px; color: var(--mid); line-height: 1.7;">
+    <strong style="color: var(--dark);">Note on Homecare Homebase (HCHB):</strong> HCHB runs server-side on a Citrix server, not on the local workstation. The three Citrix executables above protect the local Citrix Workspace client session, which is the attack surface on the endpoint. Exploitation of the Citrix client could allow session hijacking and access to HCHB data. Server-side protection (Citrix server endpoint security) is outside the scope of this workstation policy and should be confirmed with the HCHB hosting provider.
+  </div>
+
+  <!-- SYSTEM-WIDE ANTI-EXPLOIT -->
+  <div style="margin-top: 1px;">
+    <div class="flat-card">
+      <div class="tbl-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th colspan="3">System-Wide Anti-Exploit Detections (Windows)</th>
+            </tr>
+            <tr>
+              <th>Detection Type</th>
+              <th>Status</th>
+              <th>Response</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Process introspection</td>
+              <td><span class="badge b-on">Enabled</span></td>
+              <td><span class="badge b-kill">Kill process</span></td>
+            </tr>
+            <tr>
+              <td>Privilege escalation</td>
+              <td><span class="badge b-on">Enabled</span></td>
+              <td><span class="badge b-kill">Kill process</span></td>
+            </tr>
+            <tr>
+              <td>LSASS protection</td>
+              <td><span class="badge b-on">Enabled</span></td>
+              <td><span class="badge b-block">Block and report</span> — Creates audit trail for credential dumping attempts</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPLOYMENT REQUIREMENTS -->
+  <div class="section-label">Deployment Requirements <span class="chip">MSP Action Required</span></div>
+  <div class="deploy-grid">
+    <div class="deploy-card">
+      <div class="deploy-title">Syncro RMM Policy — Required Module Checkboxes</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">Advanced Threat Control — must be checked</li>
+        <li class="deploy-item">Device Control (hardware locks, drives, etc) — must be checked</li>
+        <li class="deploy-item">Content Control — must be checked</li>
+        <li class="deploy-item warn">Firewall — leave unchecked (connectivity risk — documented incident)</li>
+        <li class="deploy-item off">Power User — leave unchecked</li>
+      </ul>
+      <div class="deploy-note">&#9888; Syncro policy changes only affect new installations. Existing endpoints with missing modules must be remediated via the GravityZone Reconfigure Agent task.</div>
+    </div>
+    <div class="deploy-card">
+      <div class="deploy-title">GravityZone Reconfigure Agent — Required Modules</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">Advanced Threat Control</li>
+        <li class="deploy-item">Advanced Anti-Exploit</li>
+        <li class="deploy-item">Network Protection (parent)</li>
+        <li class="deploy-item">Content Control (sub-module)</li>
+        <li class="deploy-item">Antiphishing (sub-module)</li>
+        <li class="deploy-item">Web Traffic Scan (sub-module)</li>
+        <li class="deploy-item">Network Attack Defense (sub-module)</li>
+        <li class="deploy-item">Device Control</li>
+        <li class="deploy-item warn">Firewall — do not check</li>
+      </ul>
+      <div class="deploy-note">Run Reconfigure Agent on any endpoint showing only Antimalware in its Protection tab. Mode: Add. Scheduler: Now. A reboot may be required after module installation.</div>
+    </div>
+  </div>
+
+  <!-- AGENT NOTIFICATIONS -->
+  <div class="section-label">Agent Notification Configuration</div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Notification Type</th>
+            <th>Status</th>
+            <th>Rationale</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bitdefender tray icon</td>
+            <td><span class="badge b-off">Hidden</span></td>
+            <td>Silent mode on clinical workstations — no visual distraction during patient care</td>
+          </tr>
+          <tr>
+            <td>Alert pop-ups (require user action)</td>
+            <td><span class="badge b-off">Disabled</span></td>
+            <td>Automatic remediation actions applied without interrupting clinical staff</td>
+          </tr>
+          <tr>
+            <td>Notification pop-ups (informational)</td>
+            <td><span class="badge b-off">Disabled</span></td>
+            <td>Silent operation — all alerting routed to GravityZone console and Syncro</td>
+          </tr>
+          <tr>
+            <td>Endpoint Issues Visibility</td>
+            <td><span class="badge b-on">Enabled</span></td>
+            <td>Alerts if Antimalware, Firewall, or Update modules are disabled or degraded</td>
+          </tr>
+          <tr>
+            <td>Endpoint Restart Notifications</td>
+            <td><span class="badge b-on">Enabled</span></td>
+            <td>Users notified when restart is required after agent update or remediation</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div>GravityZone Healthcare Hardened Policy — Configuration Reference</div>
+    <div>Prepared by <strong>Advatek Technology Solution</strong> &mdash; April 2026</div>
+    <div style="margin-top: 8px;">Bitdefender GravityZone &bull; Endpoint Security &bull; Windows Workstations &bull; HIPAA Aligned</div>
+    <div style="margin-top: 8px; font-size: 10px;">This document is intended for internal MSP use and client-facing security documentation. It does not constitute legal compliance certification.</div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>

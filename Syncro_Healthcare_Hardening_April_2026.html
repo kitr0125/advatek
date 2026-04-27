@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Syncro RMM Healthcare Hardening — Advatek</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111827;
+  --slate:  #1f2937;
+  --mid:    #6b7280;
+  --light:  #9ca3af;
+  --border: #e5e7eb;
+  --bg:     #f9fafb;
+  --white:  #ffffff;
+  --red:    #dc2626;
+  --amber:  #d97706;
+  --green:  #16a34a;
+  --blue:   #2563eb;
+  --purple: #7c3aed;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* NAV */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-logo { flex-shrink: 0; text-decoration: none; }
+.nav-logo img { height: 26px; width: auto; display: block; }
+.nav-spacer { flex: 1; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.btn-print {
+  background: var(--dark); color: var(--white);
+  border: none; cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+.btn-print:hover { background: var(--black); }
+.nav-label { font-size: 11px; color: var(--light); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.nav-back { font-size: 11px; color: var(--mid); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; transition: color 0.15s; }
+.nav-back:hover { color: var(--dark); }
+
+/* HERO */
+.hero {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,24,42,0.8) 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 32px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 40px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white);
+  line-height: 1.1; margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+}
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.hero-chip {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  padding: 6px 14px;
+}
+.hero-chip.green { border-color: rgba(22,163,74,0.5); color: #4ade80; }
+.hero-chip.amber { border-color: rgba(217,119,6,0.5); color: #fbbf24; }
+.hero-stats { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.hero-stat {
+  text-align: right;
+  border-right: 2px solid rgba(255,255,255,0.15);
+  padding-right: 16px;
+}
+.hs-val { display: block; font-size: 36px; font-weight: 700; color: var(--white); letter-spacing: -1px; line-height: 1; }
+.hs-lbl { display: block; font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+/* PAGE */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+/* SECTION LABEL */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--mid);
+  margin-bottom: 20px; margin-top: 48px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label:first-child { margin-top: 0; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-label .chip {
+  background: var(--dark); color: var(--white);
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 4px 10px;
+  white-space: nowrap;
+}
+
+/* FLAT CARD */
+.flat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+/* OVERVIEW CARD */
+.overview-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 32px;
+  margin-bottom: 0;
+}
+.overview-card p { font-size: 14px; line-height: 1.8; color: var(--slate); margin-bottom: 12px; }
+.overview-card p:last-child { margin-bottom: 0; }
+
+/* KPI GRID */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 0;
+}
+.kpi {
+  background: var(--white);
+  padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  position: relative;
+}
+.kpi::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: var(--dark);
+}
+.kpi.green::before { background: var(--green); }
+.kpi.amber::before { background: var(--amber); }
+.kpi.red::before { background: var(--red); }
+.kpi.blue::before { background: var(--blue); }
+.kpi-icon { font-size: 18px; margin-bottom: 4px; }
+.kpi-val { font-size: 32px; font-weight: 700; letter-spacing: -1px; color: var(--dark); line-height: 1; }
+.kpi-lbl { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); }
+.kpi-sub { font-size: 11px; color: var(--light); }
+
+/* TABLES */
+.tbl-wrap { overflow-x: auto; }
+table.data-table { width: 100%; border-collapse: collapse; }
+table.data-table thead th {
+  background: var(--dark);
+  color: rgba(255,255,255,0.6);
+  padding: 12px 16px;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  text-align: left;
+}
+table.data-table tbody td {
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-size: 13px;
+}
+table.data-table tbody tr:last-child td { border-bottom: 0; }
+table.data-table tbody tr:hover td { background: var(--bg); }
+
+/* BADGES */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  border: 1px solid;
+}
+.b-on     { border-color: #bbf7d0; color: var(--green); background: #f0fdf4; }
+.b-off    { border-color: #e5e7eb; color: var(--mid);   background: var(--bg); }
+.b-block  { border-color: #fca5a5; color: var(--red);   background: #fef2f2; }
+.b-warn   { border-color: #fcd34d; color: var(--amber); background: #fffbeb; }
+.b-init   { border-color: #bfdbfe; color: var(--blue);  background: #eff6ff; }
+.b-week   { border-color: #ddd6fe; color: var(--purple); background: #f5f3ff; }
+.b-custom { border-color: #ddd6fe; color: var(--purple); background: #f5f3ff; }
+
+/* DARK PANEL */
+.dark-panel {
+  background: var(--dark);
+  padding: 28px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.dark-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.dark-panel-inner { position: relative; z-index: 1; }
+.dark-panel-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+.dark-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.dark-item {
+  background: rgba(255,255,255,0.04);
+  padding: 16px 20px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.dark-item-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.dark-item-title { font-size: 12px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.dark-item-sub { font-size: 11px; color: rgba(255,255,255,0.4); line-height: 1.5; }
+
+/* GAP CARDS */
+.gap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.gap-card {
+  background: var(--white);
+  padding: 24px;
+  border-left: 3px solid var(--amber);
+}
+.gap-card.red   { border-left-color: var(--red); }
+.gap-card.green { border-left-color: var(--green); }
+.gap-card.blue  { border-left-color: var(--blue); }
+.gap-title { font-weight: 700; font-size: 13px; color: var(--dark); margin-bottom: 6px; }
+.gap-desc { font-size: 12px; color: var(--mid); line-height: 1.6; }
+.gap-rec { font-size: 11px; color: var(--slate); font-weight: 600; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+
+/* DEPLOY GRID */
+.deploy-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.deploy-card { background: var(--white); padding: 24px 28px; }
+.deploy-title { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+.deploy-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.deploy-item { display: flex; align-items: flex-start; gap: 10px; font-size: 13px; color: var(--dark); }
+.deploy-item-num {
+  flex-shrink: 0; width: 20px; height: 20px;
+  background: var(--dark); color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; margin-top: 1px;
+}
+.deploy-item-num.blue  { background: var(--blue); }
+.deploy-item-num.green { background: var(--green); }
+.deploy-item-content { flex: 1; }
+.deploy-item-title { font-weight: 700; font-size: 12px; }
+.deploy-item-sub { font-size: 11px; color: var(--light); margin-top: 2px; }
+.deploy-note { font-size: 11px; color: var(--light); margin-top: 14px; line-height: 1.6; padding-top: 12px; border-top: 1px solid var(--border); }
+
+/* FIELD GRID */
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.field-card {
+  background: var(--white);
+  padding: 16px 20px;
+}
+.field-name { font-size: 12px; font-weight: 700; color: var(--dark); font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; margin-bottom: 4px; }
+.field-used { font-size: 11px; color: var(--light); }
+
+/* REPORT FOOTER */
+.report-footer {
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  text-align: center;
+  font-size: 11px; color: var(--light);
+  letter-spacing: 0.3px; line-height: 1.8;
+}
+
+/* PRINT */
+@media print {
+  nav, .btn-print { display: none !important; }
+  body { background: #fff; }
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .dark-panel { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .kpi::before { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .deploy-grid { grid-template-columns: 1fr; }
+  .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+  .hero h1 { font-size: 28px; }
+}
+@media (max-width: 600px) {
+  .nav-inner { padding: 0 16px; }
+  .hero-inner { padding: 40px 20px 36px; }
+  .page { padding: 32px 16px 48px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .dark-grid { grid-template-columns: 1fr; }
+  .gap-grid { grid-template-columns: 1fr; }
+  .field-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">&#8592;&nbsp;Portal</a>
+      <span class="nav-label">Security Documentation</span>
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Advatek Technology Solution &mdash; Security Hardening</div>
+      <h1>Syncro RMM<br>Healthcare Policy</h1>
+      <div class="hero-sub">Workstation Hardening Scripts &mdash; Configuration Reference &mdash; April 2026</div>
+      <div class="hero-chips">
+        <span class="hero-chip green">HIPAA Aligned</span>
+        <span class="hero-chip">Syncro RMM</span>
+        <span class="hero-chip">PowerShell Automation</span>
+        <span class="hero-chip">Windows Workstations</span>
+        <span class="hero-chip amber">BitLocker &bull; Audit Policy &bull; Access Control</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hs-val">11</span>
+        <span class="hs-lbl">Init Scripts</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">6</span>
+        <span class="hs-lbl">Weekly Checks</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">21</span>
+        <span class="hs-lbl">Asset Fields</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- OVERVIEW -->
+  <div class="section-label">Overview</div>
+  <div class="overview-card">
+    <p>This document details the Syncro RMM automation suite built and validated by Advatek Technology Solution in April 2026 for healthcare workstation deployments. It is the companion reference to the <strong>GravityZone Healthcare Hardened Policy</strong> document — together they cover both endpoint security (GravityZone) and operating system hardening (Syncro RMM).</p>
+    <p>The script suite is divided into two categories: 11 one-time initialization scripts that run during provisioning or compliance remediation, and 6 weekly monitoring scripts that run on a recurring schedule to detect drift, verify controls, and auto-create tickets on findings. All scripts are designed to be idempotent where possible — safe to re-run on existing workstations without causing harm.</p>
+    <p>The suite addresses HIPAA Security Rule technical safeguard requirements under 45 CFR &sect;164.312, covering encryption at rest, audit controls, automatic logoff, access control, integrity monitoring, and transmission security configuration. This document can be presented to clients or auditors as evidence of implemented RMM-layer technical safeguards.</p>
+  </div>
+
+  <!-- KPI -->
+  <div style="margin-top: 1px;">
+    <div class="kpi-grid">
+      <div class="kpi green">
+        <div class="kpi-icon">🔒</div>
+        <div class="kpi-val">11</div>
+        <div class="kpi-lbl">Init Scripts</div>
+        <div class="kpi-sub">Run once at provisioning — idempotent, safe on existing machines</div>
+      </div>
+      <div class="kpi blue">
+        <div class="kpi-icon">📅</div>
+        <div class="kpi-val">6</div>
+        <div class="kpi-lbl">Weekly Checks</div>
+        <div class="kpi-sub">Scheduled Monday — auto-tickets on findings</div>
+      </div>
+      <div class="kpi green">
+        <div class="kpi-icon">📋</div>
+        <div class="kpi-val">21</div>
+        <div class="kpi-lbl">Asset Fields</div>
+        <div class="kpi-sub">Syncro custom fields for compliance state visibility</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT INVENTORY -->
+  <div class="section-label" style="margin-top: 48px;">Script Inventory <span class="chip">17 Total</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Script ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>HIPAA Relevance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HC-INIT-001</strong></td>
+            <td>Local Admin Setup</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Creates advadmin / Advatek Support account. Disables built-in Administrator and Guest. Skips creation if account exists, verifies group membership.</td>
+            <td>Access control — unique support account (&sect;164.312(a))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-002</strong></td>
+            <td>Password &amp; Account Policy</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>90-day max password age, 12-character minimum, 24-password history, complexity enabled, 5-attempt lockout with 30-min auto-unlock. Sets Windows Update auto-install policy registry keys.</td>
+            <td>Password management (&sect;164.308(a)(5)(ii)(D))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-003</strong></td>
+            <td>BitLocker Enable + Key Escrow</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Enables BitLocker with TPM + Recovery Password protectors. Pre-checks for existing encryption — skips re-encrypt if already protected. Escrows recovery key to Syncro asset fields.</td>
+            <td>Encryption at rest (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-004</strong></td>
+            <td>Windows Security Hardening</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Disables SMBv1, LLMNR, NetBIOS over TCP/IP. Disables TLS 1.0/1.1/SSL 2.0/3.0. Enables TLS 1.2/1.3. Disables RC4/DES/3DES ciphers. Disables WDigest, enforces NTLMv2, restricts anonymous enumeration.</td>
+            <td>Transmission security, protocol hardening (&sect;164.312(e))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-005</strong></td>
+            <td>HIPAA Audit Policy</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Configures Windows audit subcategories via auditpol: logon/logoff, account management, object access, removable storage, policy change, sensitive privilege use, process creation, system integrity. Expands Security log to 200MB.</td>
+            <td>Audit controls (&sect;164.312(b))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-006</strong></td>
+            <td>Workstation Lock &amp; Screen Timeout</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Machine-level screensaver: 10-min timeout, password-on-resume, via policy registry key. 15-min inactivity lock. Hides last username on logon screen. Disables Fast User Switching. Limits cached domain logons to 2.</td>
+            <td>Automatic logoff (&sect;164.312(a)(2)(iii))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-007</strong></td>
+            <td>RDP Security Hardening</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Requires NLA. Sets encryption to High. Enforces 15-min idle timeout and 1-min disconnected session cleanup. Requires user consent for shadowing.</td>
+            <td>Access control, transmission security (&sect;164.312)</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-008</strong></td>
+            <td>Disable Unnecessary Services &amp; Features</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Disables/removes: Remote Registry, Telnet, Xbox services, Windows Media Player Network Sharing, PowerShell v2 (no AMSI/logging support), SMBv1 feature, TFTP client, Windows Insider Service, Telemetry service.</td>
+            <td>Workstation security — attack surface reduction (&sect;164.312)</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-009</strong></td>
+            <td>PowerShell Security Hardening</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Sets execution policy to RemoteSigned. Enables Script Block Logging (Event 4104), Module Logging (all modules), and Transcription to C:\ProgramData\PowerShellLogs. ACL-restricts log directory to SYSTEM and Admins.</td>
+            <td>Audit trail, malicious script detection (&sect;164.312(b))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-010</strong></td>
+            <td>GravityZone Status Verification</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Verifies EPSecurityService/EPRedLine is running and registered in Windows Security Center. Creates a ticket if agent is not found or not running. Does not modify GravityZone configuration.</td>
+            <td>Antivirus presence verification (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-INIT-011</strong></td>
+            <td>Compliance Evidence Report</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Generates an HTML compliance evidence file matching the format requested by HIPAA clients (Yanuvia). Collects BitLocker status, Windows Update policy, AV registration, and screensaver policy. Saves to C:\ProgramData\Advatek\Evidence\{COMPUTERNAME}.html.</td>
+            <td>HIPAA audit documentation — client-requestable evidence</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-001</strong></td>
+            <td>BitLocker Status Check</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Reads current BitLocker state, volume status, and recovery key. Updates Syncro fields. Creates a ticket if status is anything other than Encrypted.</td>
+            <td>Encryption at rest — ongoing monitoring (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-002</strong></td>
+            <td>Local Admin Account Audit</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Compares Administrators group against expected baseline. Flags unexpected accounts, enabled built-in Administrator, and accounts with no password requirement. Creates a ticket on any finding.</td>
+            <td>Access control — privilege audit (&sect;164.312(a)(1))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-003</strong></td>
+            <td>Windows Update Compliance</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Checks for missing updates via Windows Update COM API. Reports last successful install date. Alerts if patches are older than 30 days. Starts Windows Update service if stopped.</td>
+            <td>Patch management — workstation integrity (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-004</strong></td>
+            <td>GravityZone Health Check</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Verifies GravityZone service is running, install path is present, and agent is registered in Security Center. Attempts service restart if stopped. Creates a ticket if not healthy.</td>
+            <td>Antivirus continuity monitoring (&sect;164.312(a)(2)(iv))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-005</strong></td>
+            <td>Failed Login &amp; Lockout Review</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Queries Security log for Event 4625 (failed logon) and 4740 (lockout) over 7 days. Groups failures by username. Alerts if any user exceeds 10 failures or if any lockout occurred. Creates a ticket on findings.</td>
+            <td>Audit controls — intrusion detection (&sect;164.312(b))</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-006</strong></td>
+            <td>System Health &amp; Disk Space</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Checks all fixed drives — warning at 15% free, critical at 5%. Detects pending reboots via registry keys. Alerts if uptime exceeds 30 days. Creates Warning or Critical tickets on findings.</td>
+            <td>System availability — operational continuity (&sect;164.312(a))</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INIT SCRIPTS DETAIL -->
+  <div class="section-label">One-Time Initialization Scripts <span class="chip">11 Scripts</span></div>
+  <div class="dark-panel">
+    <div class="dark-panel-inner">
+      <div class="dark-panel-title">What Gets Configured at Provisioning</div>
+      <div class="dark-grid">
+        <div class="dark-item">
+          <div class="dark-item-icon">👤</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-001 — Local Admin Setup</div>
+            <div class="dark-item-sub">Creates advadmin / Advatek Support. Disables built-in Administrator and Guest. Password never expires — managed MSP account. Safe to re-run: skips creation if exists, verifies group membership regardless.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🔑</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-002 — Password &amp; Account Policy</div>
+            <div class="dark-item-sub">90-day max age, 12-char minimum, 24-history, complexity via secedit, 5-attempt lockout, 30-min auto-unlock. Also writes Windows Update auto-install policy registry keys (AUOptions=4, daily 3AM).</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🔒</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-003 — BitLocker Enable + Key Escrow</div>
+            <div class="dark-item-sub">TPM + Recovery Password protectors. Pre-checks existing state — skips re-encryption if already fully encrypted. Recovery key escrowed to Syncro Bitlocker_Key_C field immediately after enable.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🛡</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-004 — Windows Security Hardening</div>
+            <div class="dark-item-sub">13 discrete settings applied independently: SMBv1 off, LLMNR off, NetBIOS off, TLS 1.0/1.1/SSL off, TLS 1.2/1.3 on, weak ciphers off, WDigest off, NTLMv2-only, anonymous enumeration restricted.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">📝</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-005 — HIPAA Audit Policy</div>
+            <div class="dark-item-sub">22 audit subcategories enabled via auditpol covering all HIPAA-required event categories. Security log expanded to 200MB. Application and System logs expanded to 50MB each.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">⏱</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-006 — Workstation Lock &amp; Timeout</div>
+            <div class="dark-item-sub">Machine-level policy key — overrides user settings. 10-min screensaver with password resume. 15-min inactivity machine lock. Last username hidden on logon screen. Cached domain logons limited to 2.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🖥</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-007 — RDP Security Hardening</div>
+            <div class="dark-item-sub">NLA required. Encryption level: High. 15-min idle timeout, 1-min disconnected session cleanup. Shadowing requires user consent (value 2). RDP firewall rule confirmed active.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🔧</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-008 — Services &amp; Features</div>
+            <div class="dark-item-sub">Remote Registry disabled — major attack vector. PowerShell v2 removed — no AMSI support, enables downgrade attacks. Xbox services, WMPNetworkSvc, Telemetry, TFTP client all disabled.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">💻</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-009 — PowerShell Security</div>
+            <div class="dark-item-sub">Script Block Logging (Event 4104), Module Logging, and Transcription to C:\ProgramData\PowerShellLogs. ACL-restricted log directory. ExecutionPolicy: RemoteSigned. Creates durable audit trail for all PS activity.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">🔬</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-010 — GravityZone Verification</div>
+            <div class="dark-item-sub">Confirms EPSecurityService/EPRedLine running, install path present, Security Center registration valid. Creates a ticket if anything is missing. Does not install or configure GravityZone — detection only.</div>
+          </div>
+        </div>
+        <div class="dark-item">
+          <div class="dark-item-icon">📄</div>
+          <div>
+            <div class="dark-item-title">HC-INIT-011 — Compliance Evidence Report</div>
+            <div class="dark-item-sub">Generates {COMPUTERNAME}.html to C:\ProgramData\Advatek\Evidence\ in the exact format requested by HIPAA clients. Covers BitLocker, Windows Update policy, AV status, screensaver policy. Retrieve via Syncro file manager.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEEKLY SCRIPTS DETAIL -->
+  <div class="section-label">Weekly Monitoring Scripts <span class="chip">6 Scripts — Monday 06:00</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Script</th>
+            <th>Alert Condition</th>
+            <th>Action on Alert</th>
+            <th>Lookback / Threshold</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>HC-WEEK-001</strong><br><span style="font-size:11px;color:var(--mid)">BitLocker Status</span></td>
+            <td>Status is anything other than "Encrypted" (Decrypted, TPM error, Missing protector, etc.)</td>
+            <td>Ticket: Security / Open<br><span style="font-size:11px;color:var(--light)">Subject: BitLocker Alert — {status}</span></td>
+            <td>Current state read at time of run</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-002</strong><br><span style="font-size:11px;color:var(--mid)">Admin Audit</span></td>
+            <td>Any account in Administrators not in expected baseline; built-in Administrator enabled; account with no password required</td>
+            <td>Ticket: Security / Open<br><span style="font-size:11px;color:var(--light)">Subject: Unexpected Local Admin</span></td>
+            <td>Expected baseline: advadmin (configurable via parameter)</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-003</strong><br><span style="font-size:11px;color:var(--mid)">Patch Compliance</span></td>
+            <td>Any missing updates found; last successful install &gt;30 days ago; Windows Update service stopped</td>
+            <td>Ticket: Maintenance / Open<br><span style="font-size:11px;color:var(--light)">Lists all missing update titles</span></td>
+            <td>30-day patch age threshold (configurable)</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-004</strong><br><span style="font-size:11px;color:var(--mid)">GravityZone Health</span></td>
+            <td>Service stopped or not found; install path missing; not registered in Security Center</td>
+            <td>Attempts service restart; Ticket: Security / Open<br><span style="font-size:11px;color:var(--light)">Subject: GravityZone Not Running</span></td>
+            <td>Current state — no lookback window</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-005</strong><br><span style="font-size:11px;color:var(--mid)">Failed Logins</span></td>
+            <td>Any user with &ge;10 failed logons in 7 days; any account lockout event</td>
+            <td>Ticket: Security / Open<br><span style="font-size:11px;color:var(--light)">Grouped by username with counts</span></td>
+            <td>7 days lookback; 10 failures threshold (configurable)</td>
+          </tr>
+          <tr>
+            <td><strong>HC-WEEK-006</strong><br><span style="font-size:11px;color:var(--mid)">System Health</span></td>
+            <td>Disk &lt;15% free (Warning) or &lt;5% free (Critical); pending reboot; uptime &gt;30 days</td>
+            <td>Ticket: Maintenance (Warning) or Alert (Critical)<br><span style="font-size:11px;color:var(--light)">Per-drive breakdown included</span></td>
+            <td>15% warn / 5% critical thresholds (configurable)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOM FIELDS -->
+  <div class="section-label">Required Syncro Asset Fields <span class="chip">21 Fields</span></div>
+  <div style="padding: 14px 20px; background: var(--white); border: 1px solid var(--border); border-bottom: 0; font-size: 12px; color: var(--mid);">
+    All fields are type <strong style="color:var(--dark)">Text / Multi-line text</strong>. Create these in Syncro under Settings &rarr; Asset Custom Fields before deploying the automation policy.
+  </div>
+  <div class="field-grid">
+    <div class="field-card"><div class="field-name">Bitlocker_Key_C</div><div class="field-used">HC-INIT-003, HC-WEEK-001</div></div>
+    <div class="field-card"><div class="field-name">BitLocker Notes</div><div class="field-used">HC-INIT-003, HC-WEEK-001</div></div>
+    <div class="field-card"><div class="field-name">BitLocker Status</div><div class="field-used">HC-INIT-003, HC-WEEK-001</div></div>
+    <div class="field-card"><div class="field-name">Admin Setup Notes</div><div class="field-used">HC-INIT-001</div></div>
+    <div class="field-card"><div class="field-name">Security Policy Notes</div><div class="field-used">HC-INIT-002</div></div>
+    <div class="field-card"><div class="field-name">Security Hardening Notes</div><div class="field-used">HC-INIT-004</div></div>
+    <div class="field-card"><div class="field-name">Audit Policy Notes</div><div class="field-used">HC-INIT-005</div></div>
+    <div class="field-card"><div class="field-name">Lock Policy Notes</div><div class="field-used">HC-INIT-006</div></div>
+    <div class="field-card"><div class="field-name">RDP Security Notes</div><div class="field-used">HC-INIT-007</div></div>
+    <div class="field-card"><div class="field-name">Service Hardening Notes</div><div class="field-used">HC-INIT-008</div></div>
+    <div class="field-card"><div class="field-name">PS Security Notes</div><div class="field-used">HC-INIT-009</div></div>
+    <div class="field-card"><div class="field-name">GravityZone Status</div><div class="field-used">HC-INIT-010, HC-WEEK-004</div></div>
+    <div class="field-card"><div class="field-name">GravityZone Notes</div><div class="field-used">HC-INIT-010, HC-WEEK-004</div></div>
+    <div class="field-card"><div class="field-name">Evidence Report Path</div><div class="field-used">HC-INIT-011</div></div>
+    <div class="field-card"><div class="field-name">Evidence Report Date</div><div class="field-used">HC-INIT-011</div></div>
+    <div class="field-card"><div class="field-name">Admin Audit Status</div><div class="field-used">HC-WEEK-002</div></div>
+    <div class="field-card"><div class="field-name">Admin Audit Notes</div><div class="field-used">HC-WEEK-002</div></div>
+    <div class="field-card"><div class="field-name">Patch Compliance</div><div class="field-used">HC-WEEK-003</div></div>
+    <div class="field-card"><div class="field-name">Patch Notes</div><div class="field-used">HC-WEEK-003</div></div>
+    <div class="field-card"><div class="field-name">Security Event Status</div><div class="field-used">HC-WEEK-005</div></div>
+    <div class="field-card"><div class="field-name">Security Event Notes</div><div class="field-used">HC-WEEK-005</div></div>
+  </div>
+  <div style="padding: 0; margin-top: 1px;">
+    <div class="field-grid" style="grid-template-columns: 1fr 1fr;">
+      <div class="field-card"><div class="field-name">System Health Status</div><div class="field-used">HC-WEEK-006</div></div>
+      <div class="field-card"><div class="field-name">System Health Notes</div><div class="field-used">HC-WEEK-006</div></div>
+    </div>
+  </div>
+
+  <!-- DEPLOYMENT -->
+  <div class="section-label">Deployment Configuration <span class="chip">Two Automation Policies</span></div>
+  <div class="deploy-grid">
+    <div class="deploy-card">
+      <div class="deploy-title">HC — Initial Hardening Setup (Run Once)</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">1</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-001 — Local Admin Setup</div>
+            <div class="deploy-item-sub">Must run first — creates the support account before policy tightens access</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">2</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-002 — Password &amp; Account Policy</div>
+            <div class="deploy-item-sub">Run before BitLocker — sets Windows Update registry keys captured in evidence report</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">3</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-003 — BitLocker Enable</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">4</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-004 — Windows Security Hardening</div>
+            <div class="deploy-item-sub">Registry changes take effect immediately; reboot recommended</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">5</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-005 — HIPAA Audit Policy</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">6</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-006 — Workstation Lock &amp; Timeout</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">7</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-007 — RDP Security</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">8</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-008 — Services &amp; Features</div>
+            <div class="deploy-item-sub">Some feature removals (PS v2) require a reboot to complete</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">9</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-009 — PowerShell Security</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">10</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-010 — GravityZone Verification</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">11</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-INIT-011 — Compliance Evidence Report</div>
+            <div class="deploy-item-sub">Run last — captures the final configured state for the evidence file</div>
+          </div>
+        </li>
+      </ul>
+      <div class="deploy-note">&#9888; Schedule a reboot after scripts 001–011 complete. Then run HC-WEEK-001 at next check-in to confirm BitLocker status post-reboot and escrow the final recovery key.</div>
+    </div>
+    <div class="deploy-card">
+      <div class="deploy-title">HC — Weekly Compliance Check (Every Monday 06:00)</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">
+          <div class="deploy-item-num green">1</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-WEEK-001 — BitLocker Status</div>
+            <div class="deploy-item-sub">Run first — most critical control to verify</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">2</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-WEEK-002 — Admin Audit</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">3</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-WEEK-003 — Patch Compliance</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">4</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-WEEK-004 — GravityZone Health</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">5</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-WEEK-005 — Failed Logins &amp; Lockouts</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">6</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">HC-WEEK-006 — System Health &amp; Disk Space</div>
+          </div>
+        </li>
+      </ul>
+      <div class="deploy-note">All six scripts run in sequence. Pre-business hours timing minimizes performance impact. All findings write to Syncro asset fields and auto-create tickets. No manual review required unless a ticket is generated.</div>
+    </div>
+  </div>
+
+  <!-- KNOWN NOTES -->
+  <div class="section-label">Notes &amp; Limitations</div>
+  <div class="gap-grid">
+    <div class="gap-card">
+      <div class="gap-title">Password Expiration — 90 Days, Not 30</div>
+      <div class="gap-desc">HC-INIT-002 defaults to 90-day maximum password age. HIPAA does not mandate a specific interval (45 CFR &sect;164.308(a)(5)(ii)(D)) — it requires a procedure for managing password changes. 90 days is the standard accepted by CMS and most HIPAA auditors. 30-day expiration produces weaker passwords in practice.</div>
+      <div class="gap-rec">&rarr; The $MaxPwAgeDays parameter in HC-INIT-002 can be set to 30 if a specific client contract requires it.</div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-title">Evidence Report — Manual Retrieval</div>
+      <div class="gap-desc">HC-INIT-011 saves the compliance HTML report to C:\ProgramData\Advatek\Evidence\ on the local machine. There is no automated push to OneDrive or a shared location. A technician must retrieve the file via Syncro file manager and place it in the correct client Evidence folder.</div>
+      <div class="gap-rec">&rarr; Future: Build a Syncro script that copies the file to a mapped network share or uses robocopy to sync to a designated path if a UNC is available on the workstation.</div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-title">Create-Syncro-Ticket — Verify Parameter Names</div>
+      <div class="gap-desc">Multiple weekly scripts call Create-Syncro-Ticket for automated alerting. The exact parameter names (-Subject, -IssueType, -Status, -Body) should be verified against the installed Syncro module version in your environment before deploying at scale. Some versions may use different parameter names or require a CustomerID.</div>
+      <div class="gap-rec">&rarr; Test HC-WEEK-002 on one machine first to confirm ticket creation works as expected before enabling all six weekly scripts.</div>
+    </div>
+    <div class="gap-card blue">
+      <div class="gap-title">Existing Workstations — Safe to Re-Run</div>
+      <div class="gap-desc">All 11 INIT scripts are designed to be idempotent. They check before acting (BitLocker pre-checks encryption state, local admin skips if exists, registry keys are simply set/overwritten). Running the full INIT suite on an already-provisioned workstation will verify and enforce all settings without causing harm or resetting configurations.</div>
+      <div class="gap-rec">&rarr; Recommended: Run the full INIT suite on all existing Yanuvia and healthcare client workstations to bring them to baseline compliance.</div>
+    </div>
+    <div class="gap-card green">
+      <div class="gap-title">BitLocker Key Escrow — Recovery</div>
+      <div class="gap-desc">Recovery keys are stored in the Syncro Bitlocker_Key_C asset field and refreshed on every HC-WEEK-001 run. If a key is ever needed during a recovery scenario, pull it from the Syncro asset record. HC-INIT-011 also includes the key in the compliance evidence HTML file generated at provisioning.</div>
+      <div class="gap-rec">&rarr; Confirm key is present in Syncro after provisioning before closing the new workstation ticket.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div>Syncro RMM Healthcare Hardening Script Suite — Configuration Reference</div>
+    <div>Prepared by <strong>Advatek Technology Solution</strong> &mdash; April 2026</div>
+    <div style="margin-top: 8px;">Syncro RMM &bull; PowerShell Automation &bull; Windows Workstations &bull; HIPAA Aligned</div>
+    <div style="margin-top: 8px; font-size: 10px;">Companion document to the GravityZone Healthcare Hardened Policy reference. This document is intended for internal MSP use and client-facing security documentation. It does not constitute legal compliance certification.</div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>

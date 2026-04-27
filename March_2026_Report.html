@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>March 2026 — Monthly IT Services Report · Advatek</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111827;
+  --slate:  #1f2937;
+  --mid:    #6b7280;
+  --light:  #9ca3af;
+  --border: #e5e7eb;
+  --bg:     #f9fafb;
+  --white:  #ffffff;
+  --red:    #dc2626;
+  --amber:  #d97706;
+  --green:  #16a34a;
+  --blue:   #2563eb;
+  --purple: #7c3aed;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-logo { flex-shrink: 0; text-decoration: none; }
+.nav-logo img { height: 26px; width: auto; display: block; }
+.nav-links { display: flex; height: 100%; gap: 0; }
+.nav-link {
+  background: none; border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--mid);
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0 14px;
+  cursor: pointer; height: 100%;
+  display: flex; align-items: center;
+  transition: color 0.15s, border-color 0.15s;
+  position: relative; top: 1px;
+  white-space: nowrap;
+}
+.nav-link:hover { color: var(--dark); border-bottom-color: var(--dark); }
+.nav-spacer { flex: 1; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-back {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--mid);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.15s;
+}
+.nav-back:hover { color: var(--dark); }
+.btn-print {
+  background: var(--dark); color: var(--white);
+  border: none; cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  display: flex; align-items: center; gap: 6px;
+  transition: background 0.15s;
+}
+.btn-print:hover { background: var(--black); }
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,24,42,0.8) 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 32px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: end;
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.35);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 44px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white);
+  line-height: 1.1; margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.5px;
+}
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.hero-chip {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  padding: 6px 14px;
+}
+.hero-stats { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.hero-stat {
+  text-align: right;
+  border-right: 2px solid rgba(255,255,255,0.15);
+  padding-right: 16px;
+}
+.hs-val { display: block; font-size: 36px; font-weight: 700; color: var(--white); letter-spacing: -1px; line-height: 1; }
+.hs-lbl { display: block; font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+/* ── PAGE ─────────────────────────────────────────────── */
+.page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+/* ── SECTION LABEL ───────────────────────────────────── */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--mid);
+  margin-bottom: 20px; margin-top: 48px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label:first-child { margin-top: 0; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-label .chip {
+  background: var(--dark); color: var(--white);
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 4px 10px;
+  white-space: nowrap;
+}
+
+/* ── KPI GRID ─────────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.kpi {
+  background: var(--white);
+  padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  position: relative;
+}
+.kpi::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: var(--dark);
+}
+.kpi-icon { font-size: 18px; margin-bottom: 4px; }
+.kpi-val { font-size: 32px; font-weight: 700; letter-spacing: -1px; color: var(--dark); line-height: 1; }
+.kpi-lbl { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); }
+.kpi-sub { font-size: 11px; color: var(--light); }
+
+/* ── ACTIVITY HIGHLIGHTS ─────────────────────────────── */
+.alerts-panel {
+  background: var(--dark);
+  padding: 28px 32px;
+  margin-bottom: 0;
+  position: relative;
+  overflow: hidden;
+}
+.alerts-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.alerts-inner { position: relative; z-index: 1; }
+.alerts-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.4);
+  margin-bottom: 20px;
+}
+.alerts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.alert-item {
+  background: rgba(255,255,255,0.04);
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex; align-items: flex-start; gap: 14px;
+  transition: background 0.15s;
+  border-left: 2px solid transparent;
+}
+.alert-item:hover { background: rgba(255,255,255,0.08); border-left-color: rgba(255,255,255,0.3); }
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 2px; }
+.alert-client { font-size: 12px; font-weight: 700; color: var(--white); letter-spacing: 0.2px; margin-bottom: 3px; }
+.alert-detail { font-size: 11px; color: rgba(255,255,255,0.4); }
+
+/* ── FLAT CARD ────────────────────────────────────────── */
+.flat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+}
+
+/* ── TABLES ───────────────────────────────────────────── */
+.tbl-wrap { overflow-x: auto; }
+table.data-table { width: 100%; border-collapse: collapse; min-width: 680px; }
+table.data-table thead th {
+  background: var(--dark);
+  color: rgba(255,255,255,0.6);
+  padding: 12px 16px;
+  font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px;
+  text-align: left;
+}
+table.data-table tbody td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.data-table tbody tr:last-child td { border-bottom: 0; }
+table.data-table tbody tr:hover td { background: var(--bg); }
+
+.ticket-toggle { cursor: pointer; }
+.ticket-num { font-weight: 700; color: var(--dark); font-size: 13px; }
+.ticket-subject { font-weight: 500; color: var(--dark); font-size: 13px; }
+.expand-hint { font-size: 10px; color: var(--mid); font-weight: 600; margin-top: 3px; display: block; letter-spacing: 0.5px; }
+.ticket-notes {
+  display: none; margin-top: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 12px 14px; font-size: 12px; line-height: 1.7;
+  color: var(--mid); white-space: pre-wrap;
+}
+.ticket-notes.open { display: block; }
+
+/* ── BADGES ───────────────────────────────────────────── */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  border: 1px solid;
+}
+.b-onsite   { border-color: #fcd34d; color: var(--amber); background: #fffbeb; }
+.b-remote   { border-color: #bfdbfe; color: var(--blue);  background: #eff6ff; }
+.b-security { border-color: #fca5a5; color: var(--red);   background: #fef2f2; }
+.b-purchase { border-color: #ddd6fe; color: var(--purple); background: #f5f3ff; }
+.b-recurring{ border-color: #bbf7d0; color: var(--green); background: #f0fdf4; }
+
+/* ── HIGHLIGHT ANIMATION ─────────────────────────────── */
+@keyframes land-highlight {
+  0%   { background-color: #fef3c7; }
+  70%  { background-color: #fefce8; }
+  100% { background-color: transparent; }
+}
+.is-highlighted td { animation: land-highlight 2.4s ease forwards; }
+.purchase-card.is-highlighted { animation: land-highlight 2.4s ease forwards; }
+tr, .purchase-card { scroll-margin-top: 80px; }
+
+/* ── PURCHASE CARDS ───────────────────────────────────── */
+.purchase-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+.purchase-card {
+  background: var(--white);
+  padding: 24px;
+  border-left: 3px solid var(--dark);
+  position: relative;
+}
+.pc-client { font-weight: 700; font-size: 14px; color: var(--dark); margin-bottom: 4px; }
+.pc-product { font-size: 12px; color: var(--mid); margin-bottom: 10px; line-height: 1.5; }
+.pc-date { font-size: 10px; color: var(--light); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+
+/* ── LICENSE TABLES ───────────────────────────────────── */
+.lic-block { padding: 28px 32px; overflow-x: auto; }
+.lic-block + .lic-block { border-top: 1px solid var(--border); }
+.lic-vendor-label {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 3px; color: var(--mid);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.lic-vendor-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.lic-table { width: 100%; border-collapse: collapse; }
+.lic-table th {
+  font-size: 9px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 2px; color: var(--mid);
+  padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border);
+}
+.lic-table td { padding: 11px 12px; font-size: 13px; border-bottom: 1px solid var(--bg); vertical-align: middle; }
+.lic-table tr:last-child td { border-bottom: 0; }
+.lic-table tr:hover td { background: var(--bg); }
+.lic-client { font-weight: 600; color: var(--dark); }
+.lic-total  { font-weight: 800; color: var(--dark); text-align: right; }
+.lic-plan-chips { display: flex; gap: 4px; flex-wrap: wrap; }
+.lic-plan-chip { background: var(--bg); border: 1px solid var(--border); padding: 2px 8px; font-size: 11px; color: var(--mid); }
+.lic-bar-wrap { min-width: 100px; }
+.lic-bar-bg { background: var(--border); height: 5px; }
+.lic-bar-fill { height: 100%; }
+.lic-bar-fill.blue   { background: var(--dark); }
+.lic-bar-fill.green  { background: var(--slate); }
+.lic-bar-fill.purple { background: var(--mid); }
+
+/* ── SECURITY BARS ────────────────────────────────────── */
+.sec-grid { padding: 28px 32px; display: grid; gap: 10px; }
+.sec-row { display: grid; grid-template-columns: 220px 1fr 52px; gap: 14px; align-items: center; }
+.sec-name { font-size: 12px; font-weight: 600; color: var(--dark); }
+.sec-bar-bg { background: var(--border); height: 6px; }
+.sec-bar-fill { height: 100%; background: var(--dark); }
+.sec-count { font-weight: 800; font-size: 13px; color: var(--dark); text-align: right; }
+.sec-total-bar {
+  background: var(--dark);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 32px;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+.sec-total-bar strong { color: var(--white); font-size: 14px; letter-spacing: -0.5px; }
+
+/* ── FLEET GRID ───────────────────────────────────────── */
+.fleet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  padding: 1px;
+}
+.fleet-card { background: var(--white); padding: 20px; }
+.fleet-client { font-weight: 700; font-size: 12px; letter-spacing: 0.3px; color: var(--dark); margin-bottom: 10px; }
+.fleet-devices { display: flex; flex-wrap: wrap; gap: 6px; }
+.fleet-tag {
+  display: flex; align-items: center; gap: 4px;
+  border: 1px solid var(--border);
+  padding: 4px 9px; font-size: 11px; font-weight: 600; color: var(--mid);
+  background: var(--bg);
+}
+
+/* ── REPORT FOOTER ────────────────────────────────────── */
+.report-footer {
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  text-align: center;
+  font-size: 11px; color: var(--light);
+  letter-spacing: 0.3px; line-height: 1.8;
+}
+
+/* ── PRINT ────────────────────────────────────────────── */
+@media print {
+  nav, .btn-print { display: none !important; }
+  body { background: #fff; }
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .alerts-panel { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .hero h1 { font-size: 34px; }
+}
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .nav-inner { padding: 0 20px; gap: 16px; }
+  .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+  .hero h1 { font-size: 28px; letter-spacing: 2px; }
+  .hero-stats { flex-direction: row; align-items: center; }
+  .hero-stat { text-align: left; border-right: none; border-left: 2px solid rgba(255,255,255,0.15); padding-right: 0; padding-left: 16px; }
+  .hero-inner { padding: 40px 20px 36px; }
+  .page { padding: 32px 20px 48px; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .alerts-panel { padding: 20px; }
+  .sec-row { grid-template-columns: 1fr 48px; grid-template-rows: auto auto; row-gap: 4px; }
+  .sec-name { grid-column: 1 / -1; }
+  .lic-table th:last-child, .lic-table td:last-child { display: none; }
+  .fleet-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 22px; letter-spacing: 1px; }
+  .hero-inner { padding: 32px 16px 28px; }
+  .page { padding: 24px 16px 40px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .fleet-grid { grid-template-columns: 1fr; }
+  .purchase-grid { grid-template-columns: 1fr; }
+  .alerts-grid { grid-template-columns: 1fr; }
+  .hero-stats { flex-direction: column; }
+  .nav-inner { padding: 0 16px; gap: 12px; }
+  .nav-back span { display: none; }
+  .sec-grid { padding: 20px 16px; }
+  .lic-block { padding: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </a>
+    <div class="nav-links">
+      <button class="nav-link" onclick="goTo('tickets')">Tickets</button>
+      <button class="nav-link" onclick="goTo('purchases')">Purchases</button>
+      <button class="nav-link" onclick="goTo('licenses')">Licenses</button>
+      <button class="nav-link" onclick="goTo('security')">Security</button>
+      <button class="nav-link" onclick="goTo('fleet')">Fleet</button>
+      <button class="nav-link" onclick="goTo('matrix')">Matrix</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">&#8592;&nbsp;Portal</a>
+      <button class="btn-print" onclick="window.print()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9V2h12v7"/><rect x="6" y="14" width="12" height="8" rx="1"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/></svg>
+        Print
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Monthly IT Services Report &nbsp;·&nbsp; Advatek Technology Solutions</div>
+      <h1>March 2026<br>Summary</h1>
+      <p class="hero-sub">Reporting period: March 1 – March 31, 2026</p>
+      <div class="hero-chips">
+        <span class="hero-chip">28 Clients</span>
+        <span class="hero-chip">5 Support Tickets</span>
+        <span class="hero-chip">511 Recurring Seats</span>
+        <span class="hero-chip">340 IronScales Seats</span>
+        <span class="hero-chip">4 License Purchases</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hs-val">3.07</span>
+        <span class="hs-lbl">Hours Billed</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">7</span>
+        <span class="hs-lbl">Items for Review</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- KPI ROW -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-val">28</div>
+      <div class="kpi-lbl">Clients</div>
+      <div class="kpi-sub">Active in March</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">🎫</div>
+      <div class="kpi-val">5</div>
+      <div class="kpi-lbl">Support Tickets</div>
+      <div class="kpi-sub">3.07 hrs across 4 clients</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">🪟</div>
+      <div class="kpi-val">4</div>
+      <div class="kpi-lbl">License Purchases</div>
+      <div class="kpi-sub">Office 2021 + Win 11 · 3 clients</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">🔄</div>
+      <div class="kpi-val">511</div>
+      <div class="kpi-lbl">Recurring Seats</div>
+      <div class="kpi-sub">Microsoft · Pax8 · Sherweb</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-icon">🛡️</div>
+      <div class="kpi-val">340</div>
+      <div class="kpi-lbl">Security Seats</div>
+      <div class="kpi-sub">IronScales · 12 clients</div>
+    </div>
+  </div>
+
+  <!-- ACTIVITY HIGHLIGHTS -->
+  <div class="alerts-panel">
+    <div class="alerts-inner">
+      <div class="alerts-title">Activity Highlights — Items for Review</div>
+      <div class="alerts-grid">
+        <div class="alert-item" onclick="jumpTo('row-cohen')">
+          <div class="alert-icon">🎫</div>
+          <div>
+            <div class="alert-client">Cohen Investments</div>
+            <div class="alert-detail">2 tickets · 1.02 hrs (remote support)</div>
+          </div>
+        </div>
+        <div class="alert-item" onclick="jumpTo('row-8559')">
+          <div class="alert-icon">🚗</div>
+          <div>
+            <div class="alert-client">First Baptist Church</div>
+            <div class="alert-detail">1 ticket · 1.75 hrs · Onsite + travel (Tim)</div>
+          </div>
+        </div>
+        <div class="alert-item" onclick="jumpTo('row-8542')">
+          <div class="alert-icon">🎫</div>
+          <div>
+            <div class="alert-client">The Law Offices of Libby &amp; Nahmias</div>
+            <div class="alert-detail">1 ticket · 0.22 hrs (remote support)</div>
+          </div>
+        </div>
+        <div class="alert-item" onclick="jumpTo('row-8579')">
+          <div class="alert-icon">🎫</div>
+          <div>
+            <div class="alert-client">Memphis Lawfirm</div>
+            <div class="alert-detail">1 ticket · 0.08 hrs (remote support)</div>
+          </div>
+        </div>
+        <div class="alert-item" onclick="jumpTo('pc-fulwood')">
+          <div class="alert-icon">🪟</div>
+          <div>
+            <div class="alert-client">Fulwood Construction</div>
+            <div class="alert-detail">2 one-time license purchases</div>
+          </div>
+        </div>
+        <div class="alert-item" onclick="jumpTo('pc-elon')">
+          <div class="alert-icon">🪟</div>
+          <div>
+            <div class="alert-client">Elon Manor</div>
+            <div class="alert-detail">1 one-time license purchase (DT22)</div>
+          </div>
+        </div>
+        <div class="alert-item" onclick="jumpTo('pc-supplyline')">
+          <div class="alert-icon">🪟</div>
+          <div>
+            <div class="alert-client">Supply Line — Collierville</div>
+            <div class="alert-detail">1 one-time license purchase (DT4)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICE TICKETS -->
+  <div class="section-label" id="tickets">Service Tickets <span class="chip">5 tickets · 3.07 hrs</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:100px">Ticket</th>
+            <th>Subject &amp; Notes</th>
+            <th>Client</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th style="width:90px;text-align:right">Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="row-8559">
+            <td class="ticket-toggle" onclick="toggleNotes('n8559')">
+              <div class="ticket-num">#8559</div>
+              <span class="expand-hint">▸ View notes</span>
+            </td>
+            <td>
+              <div class="ticket-subject">Phones are offline</div>
+              <div id="n8559" class="ticket-notes">Tim went onsite and found out that the cable connecting the day school and the church was defective, went ahead and replaced it.
+
+Travel time: 2:45 – 3:22
+Onsite time: 3:22 – 4:30</div>
+            </td>
+            <td>First Baptist Church</td>
+            <td>Mar 04, 2026</td>
+            <td><span class="badge b-onsite">🚗 Onsite</span></td>
+            <td style="text-align:right;font-weight:700">1 hr 45 min</td>
+          </tr>
+          <tr id="row-cohen">
+            <td class="ticket-toggle" onclick="toggleNotes('n8541')">
+              <div class="ticket-num">#8541</div>
+              <span class="expand-hint">▸ View notes</span>
+            </td>
+            <td>
+              <div class="ticket-subject">Adding email to iPhone</div>
+              <div id="n8541" class="ticket-notes">Guided Pat on how to add her work email on her iOS account. Pat has limited knowledge on iOS and kept on starting over — she decided to have someone do it for her later.</div>
+            </td>
+            <td>Cohen Investments</td>
+            <td>Mar 02, 2026</td>
+            <td><span class="badge b-remote">Remote</span></td>
+            <td style="text-align:right;font-weight:700">36 min</td>
+          </tr>
+          <tr>
+            <td class="ticket-toggle" onclick="toggleNotes('n8653')">
+              <div class="ticket-num">#8653</div>
+              <span class="expand-hint">▸ View notes</span>
+            </td>
+            <td>
+              <div class="ticket-subject">Suspicious 2FA Expiration Email — Confirmed Phishing</div>
+              <div id="n8653" class="ticket-notes">Analyzed the email and confirmed that it was a phishing attempt.</div>
+            </td>
+            <td>Cohen Investments</td>
+            <td>Mar 30, 2026</td>
+            <td><span class="badge b-security">🛡 Security</span></td>
+            <td style="text-align:right;font-weight:700">25 min</td>
+          </tr>
+          <tr id="row-8542">
+            <td class="ticket-toggle" onclick="toggleNotes('n8542')">
+              <div class="ticket-num">#8542</div>
+              <span class="expand-hint">▸ View notes</span>
+            </td>
+            <td>
+              <div class="ticket-subject">Outlook credit card warning on sent email</div>
+              <div id="n8542" class="ticket-notes">Message was successfully delivered to the recipient's mail system. No transport failure occurred within M365. DLP generated notification only; no enforcement action taken.</div>
+            </td>
+            <td>The Law Offices of Libby &amp; Nahmias</td>
+            <td>Mar 02, 2026</td>
+            <td><span class="badge b-remote">Remote</span></td>
+            <td style="text-align:right;font-weight:700">13 min</td>
+          </tr>
+          <tr id="row-8579">
+            <td class="ticket-toggle" onclick="toggleNotes('n8579')">
+              <div class="ticket-num">#8579</div>
+              <span class="expand-hint">▸ View notes</span>
+            </td>
+            <td>
+              <div class="ticket-subject">Unable to login to email — Incorrect password</div>
+              <div id="n8579" class="ticket-notes">Larry had the right password but his account was locked out. Unlocked the account.</div>
+            </td>
+            <td>Memphis Lawfirm</td>
+            <td>Mar 09, 2026</td>
+            <td><span class="badge b-remote">Remote</span></td>
+            <td style="text-align:right;font-weight:700">5 min</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- LICENSE PURCHASES -->
+  <div class="section-label" id="purchases">One-Time License Purchases <span class="chip">4 items · 3 clients</span></div>
+  <div class="purchase-grid">
+    <div class="purchase-card" id="pc-fulwood">
+      <div class="pc-client">Fulwood Construction</div>
+      <div class="pc-product">Microsoft Office 2021 Professional Plus (PC)</div>
+      <div class="pc-date">Purchased Mar 04, 2026</div>
+    </div>
+    <div class="purchase-card">
+      <div class="pc-client">Fulwood Construction</div>
+      <div class="pc-product">Windows 11 Pro</div>
+      <div class="pc-date">Purchased Mar 04, 2026</div>
+    </div>
+    <div class="purchase-card" id="pc-elon">
+      <div class="pc-client">Elon Manor — DT22</div>
+      <div class="pc-product">Microsoft Office 2021 Professional Plus (PC)</div>
+      <div class="pc-date">Purchased Mar 04, 2026</div>
+    </div>
+    <div class="purchase-card" id="pc-supplyline">
+      <div class="pc-client">Supply Line Collierville — DT4</div>
+      <div class="pc-product">Microsoft Office 2021 Professional Plus (PC)</div>
+      <div class="pc-date">Purchased Mar 24, 2026</div>
+    </div>
+  </div>
+
+  <!-- RECURRING LICENSES -->
+  <div class="section-label" id="licenses">Recurring License Counts <span class="chip">511 total seats</span></div>
+  <div class="flat-card">
+
+    <div class="lic-block">
+      <div class="lic-vendor-label">Microsoft 365 Direct &mdash; 452 seats</div>
+      <table class="lic-table">
+        <thead><tr><th>Client</th><th>Plans</th><th style="width:55px;text-align:right">Total</th><th style="width:130px">Scale</th></tr></thead>
+        <tbody>
+          <tr><td class="lic-client">Inspired Homecare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×46</span><span class="lic-plan-chip">Basic ×34</span><span class="lic-plan-chip">AIP P1 ×73</span><span class="lic-plan-chip">Exch ×3</span></div></td><td class="lic-total">156</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:100%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Elon Manor</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Basic ×31</span><span class="lic-plan-chip">AIP P1 ×33</span></div></td><td class="lic-total">64</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:41%"></div></div></div></td></tr>
+          <tr><td class="lic-client">SA Nurses</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×13</span><span class="lic-plan-chip">Basic ×19</span><span class="lic-plan-chip">AIP P1 ×31</span></div></td><td class="lic-total">63</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:40%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Transition Healthcare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×57</span></div></td><td class="lic-total">57</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:36.5%"></div></div></div></td></tr>
+          <tr><td class="lic-client">PDOC</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">AIP P1 ×24</span><span class="lic-plan-chip">Exch ×25</span></div></td><td class="lic-total">49</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:31.4%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Carrollton Nursing Home</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×21</span><span class="lic-plan-chip">Premium ×4</span></div></td><td class="lic-total">25</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:16%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Pine Knoll N&amp;R Center</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×10</span><span class="lic-plan-chip">Premium ×10</span></div></td><td class="lic-total">20</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:12.8%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Pearl Pointe</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×15</span><span class="lic-plan-chip">Premium ×3</span></div></td><td class="lic-total">18</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:11.5%"></div></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lic-block">
+      <div class="lic-vendor-label">Microsoft 365 via Pax8 &mdash; 44 seats</div>
+      <table class="lic-table">
+        <thead><tr><th>Client</th><th>Plans</th><th style="width:55px;text-align:right">Total</th><th style="width:130px">Scale</th></tr></thead>
+        <tbody>
+          <tr><td class="lic-client">Shefa Living</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×26</span></div></td><td class="lic-total">26</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:100%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Battery Alliance</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Exch ×2</span><span class="lic-plan-chip">Basic ×9</span></div></td><td class="lic-total">11</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:42.3%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Cohen Investments</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std ×4</span><span class="lic-plan-chip">Exch ×2</span></div></td><td class="lic-total">6</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:23.1%"></div></div></div></td></tr>
+          <tr><td class="lic-client">The Law Offices of Libby &amp; Nahmias</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Exch ×1</span></div></td><td class="lic-total">1</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:3.8%"></div></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="lic-block">
+      <div class="lic-vendor-label">Email Hosting via Sherweb &mdash; 15 seats</div>
+      <table class="lic-table">
+        <thead><tr><th>Client</th><th>Plans</th><th style="width:55px;text-align:right">Total</th><th style="width:130px">Scale</th></tr></thead>
+        <tbody>
+          <tr><td class="lic-client">CPM</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Email 200 GB ×15</span></div></td><td class="lic-total">15</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill purple" style="width:100%"></div></div></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- SECURITY -->
+  <div class="section-label" id="security">IronScales Security Coverage <span class="chip">340 seats · 12 clients</span></div>
+  <div class="flat-card">
+    <div class="sec-grid">
+      <div class="sec-row"><span class="sec-name">Inspired Homecare</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:100%"></div></div><span class="sec-count">87</span></div>
+      <div class="sec-row"><span class="sec-name">Transitions Healthcare</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:65.5%"></div></div><span class="sec-count">57</span></div>
+      <div class="sec-row"><span class="sec-name">Yanuvia</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:49.4%"></div></div><span class="sec-count">43</span></div>
+      <div class="sec-row"><span class="sec-name">Elon Manor</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:40.2%"></div></div><span class="sec-count">35</span></div>
+      <div class="sec-row"><span class="sec-name">SA Nurses</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:31%"></div></div><span class="sec-count">27</span></div>
+      <div class="sec-row"><span class="sec-name">Carrollton Nursing Home</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:28.7%"></div></div><span class="sec-count">25</span></div>
+      <div class="sec-row"><span class="sec-name">PDOC</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:28.7%"></div></div><span class="sec-count">25</span></div>
+      <div class="sec-row"><span class="sec-name">Pine Knoll N&amp;R Center</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:23%"></div></div><span class="sec-count">20</span></div>
+      <div class="sec-row"><span class="sec-name">Fulwood Construction</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:9.2%"></div></div><span class="sec-count">8</span></div>
+      <div class="sec-row"><span class="sec-name">JGH Legal</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:8%"></div></div><span class="sec-count">7</span></div>
+      <div class="sec-row"><span class="sec-name">Memphis Lawfirm</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:4.6%"></div></div><span class="sec-count">4</span></div>
+      <div class="sec-row"><span class="sec-name">Message Factors</span><div class="sec-bar-bg"><div class="sec-bar-fill" style="width:2.3%"></div></div><span class="sec-count">2</span></div>
+    </div>
+    <div class="sec-total-bar"><span>IronScales seats tracked this month</span><strong>340 total</strong></div>
+  </div>
+
+  <!-- FLEET -->
+  <div class="section-label" id="fleet">Device Fleet Overview <span class="chip">15 clients</span></div>
+  <div class="flat-card">
+    <div class="fleet-grid">
+      <div class="fleet-card"><div class="fleet-client">PDOC</div><div class="fleet-devices"><span class="fleet-tag">🖥 65 devices</span><span class="fleet-tag">🔥 2 firewalls</span><span class="fleet-tag">💾 1 Datto</span><span class="fleet-tag">🗄 2 servers</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Elon Manor</div><div class="fleet-devices"><span class="fleet-tag">🖥 47 devices</span><span class="fleet-tag">📱 18 tablets</span><span class="fleet-tag">🔥 1 firewall</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">BPD</div><div class="fleet-devices"><span class="fleet-tag">🖥 40 devices</span><span class="fleet-tag">🔥 2 firewalls</span><span class="fleet-tag">💾 1 Datto</span><span class="fleet-tag">🗄 2 servers</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Yanuvia</div><div class="fleet-devices"><span class="fleet-tag">🖥 40 devices</span><span class="fleet-tag">📱 1 tablet</span><span class="fleet-tag">🔥 1 firewall</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Transition Healthcare</div><div class="fleet-devices"><span class="fleet-tag">📱 25 tablets</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">CPM</div><div class="fleet-devices"><span class="fleet-tag">🖥 22 devices</span><span class="fleet-tag">🔥 1 firewall</span><span class="fleet-tag">🗄 1 server</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Supply Line — Lamar</div><div class="fleet-devices"><span class="fleet-tag">🖥 20 devices</span><span class="fleet-tag">🔥 1 firewall</span><span class="fleet-tag">🗄 1 server</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Supply Line — Collierville</div><div class="fleet-devices"><span class="fleet-tag">🖥 12 devices</span><span class="fleet-tag">💾 1 Datto</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Clinton Endo</div><div class="fleet-devices"><span class="fleet-tag">🖥 11 devices</span><span class="fleet-tag">🔥 1 firewall</span><span class="fleet-tag">💾 1 Datto</span><span class="fleet-tag">🗄 2 servers</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Cozine</div><div class="fleet-devices"><span class="fleet-tag">🖥 8 devices</span><span class="fleet-tag">💾 1 Datto</span><span class="fleet-tag">🗄 1 server</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Wells Plumbing</div><div class="fleet-devices"><span class="fleet-tag">🖥 7 devices</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Fulwood Construction</div><div class="fleet-devices"><span class="fleet-tag">🖥 6 devices</span><span class="fleet-tag">🔥 1 firewall</span><span class="fleet-tag">💾 1 Datto</span><span class="fleet-tag">🗄 1 server</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Shaw Investments</div><div class="fleet-devices"><span class="fleet-tag">💾 8 Datto</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Barkley</div><div class="fleet-devices"><span class="fleet-tag">💾 1 Datto</span></div></div>
+      <div class="fleet-card"><div class="fleet-client">Baymark</div><div class="fleet-devices"><span class="fleet-tag">💾 1 Datto</span></div></div>
+    </div>
+  </div>
+
+  <!-- CLIENT MATRIX -->
+  <div class="section-label" id="matrix">Full Client Matrix <span class="chip">28 clients</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Client</th><th>Support</th><th>One-Time</th>
+            <th>Recurring Seats</th><th>IronScales</th><th>Infrastructure</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="font-weight:600">Inspired Homecare</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">156 MS Direct</span></td><td style="font-weight:700">87</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Transition Healthcare</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">57 MS Direct</span></td><td style="font-weight:700">57</td><td>25 tablets</td></tr>
+          <tr><td style="font-weight:600">Yanuvia</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="font-weight:700">43</td><td>40 dev · 1 tab · 1 FW</td></tr>
+          <tr><td style="font-weight:600">Elon Manor</td><td style="color:#9ca3af">—</td><td><span class="badge b-purchase">1 license</span></td><td><span class="badge b-recurring">64 MS Direct</span></td><td style="font-weight:700">35</td><td>47 dev · 18 tab · 1 FW</td></tr>
+          <tr><td style="font-weight:600">SA Nurses</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">63 MS Direct</span></td><td style="font-weight:700">27</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">PDOC</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">49 MS Direct</span></td><td style="font-weight:700">25</td><td>65 dev · 2 FW · 1 Datto · 2 Srv</td></tr>
+          <tr><td style="font-weight:600">Carrollton Nursing Home</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">25 MS Direct</span></td><td style="font-weight:700">25</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Pine Knoll N&amp;R Center</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">20 MS Direct</span></td><td style="font-weight:700">20</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Pearl Pointe</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">18 MS Direct</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Shefa Living</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">26 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Battery Alliance</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">11 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Cohen Investments</td><td><span class="badge b-onsite">2 tickets · 1.02 hrs</span></td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">6 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">First Baptist Church</td><td><span class="badge b-onsite">1 ticket · 1.75 hrs 🚗</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">The Law Offices of Libby &amp; Nahmias</td><td><span class="badge b-remote">1 ticket · 0.22 hrs</span></td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">1 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Memphis Lawfirm</td><td><span class="badge b-remote">1 ticket · 0.08 hrs</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="font-weight:700">4</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Fulwood Construction</td><td style="color:#9ca3af">—</td><td><span class="badge b-purchase">2 licenses</span></td><td style="color:#9ca3af">—</td><td style="font-weight:700">8</td><td>8 dev · 1 FW · 1 Datto · 1 Srv</td></tr>
+          <tr><td style="font-weight:600">Supply Line — Collierville</td><td style="color:#9ca3af">—</td><td><span class="badge b-purchase">1 license</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>12 dev · 1 Datto</td></tr>
+          <tr><td style="font-weight:600">CPM</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">15 Sherweb</span></td><td style="color:#9ca3af">—</td><td>22 dev · 1 FW · 1 Srv</td></tr>
+          <tr><td style="font-weight:600">JGH Legal</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="font-weight:700">7</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">Message Factors</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="font-weight:700">2</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">BPD</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>40 dev · 2 FW · 1 Datto · 2 Srv</td></tr>
+          <tr><td style="font-weight:600">Clinton Endo</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>11 dev · 1 FW · 1 Datto · 2 Srv</td></tr>
+          <tr><td style="font-weight:600">Cozine</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>8 dev · 1 Datto · 1 Srv</td></tr>
+          <tr><td style="font-weight:600">Supply Line — Lamar</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>20 dev · 1 FW · 1 Srv</td></tr>
+          <tr><td style="font-weight:600">Wells Plumbing</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>7 devices</td></tr>
+          <tr><td style="font-weight:600">Barkley</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>1 Datto</td></tr>
+          <tr><td style="font-weight:600">Baymark</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>1 Datto</td></tr>
+          <tr><td style="font-weight:600">Shaw Investments</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td>8 Datto</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="report-footer">
+    <strong>March 2026 Monthly IT Services Report</strong> &nbsp;·&nbsp; Advatek Technology Solutions<br>
+    Reporting period: March 1 – March 31, 2026 &nbsp;·&nbsp; Confidential
+  </div>
+
+</div>
+
+<script>
+function jumpTo(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  el.classList.remove('is-highlighted');
+  void el.offsetWidth;
+  el.classList.add('is-highlighted');
+  setTimeout(function() { el.classList.remove('is-highlighted'); }, 2500);
+}
+function goTo(id) {
+  var el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function toggleNotes(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.classList.toggle('open');
+  var hint = el.previousElementSibling;
+  if (hint) hint.textContent = el.classList.contains('open') ? '▾ Hide notes' : '▸ View notes';
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GravityZone SMB Standard — Console Configuration Guide — Advatek</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111827;
+  --slate:  #1f2937;
+  --mid:    #6b7280;
+  --light:  #9ca3af;
+  --border: #e5e7eb;
+  --bg:     #f9fafb;
+  --white:  #ffffff;
+  --red:    #dc2626;
+  --amber:  #d97706;
+  --green:  #16a34a;
+  --blue:   #2563eb;
+  --purple: #7c3aed;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 32px; height: 64px;
+  display: flex; align-items: center; gap: 32px;
+}
+.nav-logo { flex-shrink: 0; text-decoration: none; }
+.nav-logo img { height: 26px; display: block; }
+.nav-spacer { flex: 1; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.btn-print {
+  background: var(--dark); color: var(--white);
+  border: none; cursor: pointer;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+  padding: 8px 16px; display: flex; align-items: center; gap: 6px;
+}
+.nav-label { font-size: 11px; color: var(--light); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.nav-back { font-size: 11px; color: var(--mid); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; text-decoration: none; }
+.nav-back:hover { color: var(--dark); }
+
+.hero {
+  background: var(--black); position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,24,42,0.8) 100%);
+}
+.hero-bg::before {
+  content: ''; position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: 56px 32px 48px;
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 40px; align-items: end;
+}
+.hero-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 14px; }
+.hero h1 { font-size: 36px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--white); line-height: 1.1; margin-bottom: 12px; }
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.35); }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.hero-chip { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.5); padding: 6px 14px; }
+.hero-chip.green { border-color: rgba(22,163,74,0.5); color: #4ade80; }
+.hero-chip.amber { border-color: rgba(217,119,6,0.5); color: #fbbf24; }
+.hero-stats { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+.hero-stat { text-align: right; border-right: 2px solid rgba(255,255,255,0.15); padding-right: 16px; }
+.hs-val { display: block; font-size: 32px; font-weight: 700; color: var(--white); letter-spacing: -1px; line-height: 1; }
+.hs-lbl { display: block; font-size: 9px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-top: 4px; }
+
+.page { max-width: 1200px; margin: 0 auto; padding: 48px 32px 64px; }
+
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--mid);
+  margin-bottom: 20px; margin-top: 52px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label:first-child { margin-top: 0; }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.section-label .chip {
+  background: var(--dark); color: var(--white);
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 10px; white-space: nowrap;
+}
+
+/* CONFIG BLOCK — the core component of this doc */
+.config-block {
+  border: 1px solid var(--border);
+  background: var(--white);
+  margin-bottom: 1px;
+}
+.config-block:last-child { margin-bottom: 0; }
+
+.config-header {
+  display: flex; align-items: center; gap: 0;
+  border-bottom: 1px solid var(--border);
+}
+.config-nav {
+  background: var(--dark);
+  color: rgba(255,255,255,0.5);
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 6px;
+  flex-shrink: 0;
+}
+.config-nav .sep { color: rgba(255,255,255,0.2); margin: 0 2px; }
+.config-nav .leaf { color: rgba(255,255,255,0.85); }
+.config-title {
+  font-size: 12px; font-weight: 700; color: var(--dark);
+  padding: 10px 16px; flex: 1;
+  border-left: 1px solid var(--border);
+}
+
+.config-rows { width: 100%; border-collapse: collapse; }
+.config-rows td {
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  font-size: 13px;
+}
+.config-rows tr:last-child td { border-bottom: 0; }
+.config-rows tr:hover td { background: var(--bg); }
+.col-field { width: 32%; font-weight: 600; color: var(--slate); }
+.col-value { width: 20%; }
+.col-note { width: 48%; color: var(--mid); font-size: 12px; }
+
+/* BADGES */
+.badge {
+  display: inline-flex; align-items: center;
+  padding: 3px 10px; font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  border: 1px solid;
+}
+.b-on     { border-color: #bbf7d0; color: var(--green); background: #f0fdf4; }
+.b-off    { border-color: #e5e7eb; color: var(--mid);   background: var(--bg); }
+.b-block  { border-color: #fca5a5; color: var(--red);   background: #fef2f2; }
+.b-kill   { border-color: #fca5a5; color: var(--red);   background: #fef2f2; }
+.b-warn   { border-color: #fcd34d; color: var(--amber); background: #fffbeb; }
+.b-aggressive { border-color: #c7d2fe; color: #4338ca; background: #eef2ff; }
+.b-custom { border-color: #ddd6fe; color: var(--purple); background: #f5f3ff; }
+.b-skip   { border-color: #e5e7eb; color: var(--light); background: var(--bg); }
+
+/* PREREQ BOX */
+.prereq-box {
+  background: var(--dark); color: rgba(255,255,255,0.75);
+  padding: 24px 28px; font-size: 13px; line-height: 1.8;
+  margin-bottom: 1px;
+}
+.prereq-box strong { color: var(--white); }
+.prereq-step { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 10px; }
+.prereq-step:last-child { margin-bottom: 0; }
+.prereq-num {
+  flex-shrink: 0; width: 22px; height: 22px;
+  background: rgba(255,255,255,0.1); color: var(--white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; margin-top: 2px;
+}
+.prereq-text { font-size: 12px; color: rgba(255,255,255,0.6); }
+.prereq-text strong { color: rgba(255,255,255,0.9); }
+
+/* NOTE INLINE */
+.inline-note {
+  background: #fffbeb; border: 1px solid #fcd34d; border-left: 3px solid var(--amber);
+  padding: 12px 16px; font-size: 12px; color: var(--slate); line-height: 1.7;
+  margin-top: 1px;
+}
+.inline-note.blue { background: #eff6ff; border-color: #bfdbfe; border-left-color: var(--blue); }
+.inline-note.red  { background: #fef2f2; border-color: #fca5a5; border-left-color: var(--red); }
+
+/* REPORT FOOTER */
+.report-footer {
+  margin-top: 48px; border-top: 1px solid var(--border); padding-top: 24px;
+  text-align: center; font-size: 11px; color: var(--light);
+  letter-spacing: 0.3px; line-height: 1.8;
+}
+
+@media print {
+  nav, .btn-print { display: none !important; }
+  body { background: #fff; }
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .prereq-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 28px; }
+}
+@media (max-width: 600px) {
+  .nav-inner { padding: 0 16px; }
+  .hero-inner { padding: 40px 20px 36px; }
+  .page { padding: 32px 16px 48px; }
+  .col-note { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">&#8592;&nbsp;Portal</a>
+      <span class="nav-label">Security Documentation</span>
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Advatek Technology Solution &mdash; Security Hardening</div>
+      <h1>GravityZone SMB Standard<br>Console Configuration</h1>
+      <div class="hero-sub">Step-by-step GravityZone Control Center settings — April 2026</div>
+      <div class="hero-chips">
+        <span class="hero-chip green">Field-Level Reference</span>
+        <span class="hero-chip">Bitdefender GravityZone</span>
+        <span class="hero-chip">SMB Standard Policy</span>
+        <span class="hero-chip amber">Apply After Cloning Default Policy</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hs-val">8</span>
+        <span class="hs-lbl">Policy Sections</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">40+</span>
+        <span class="hs-lbl">Fields Configured</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- PREREQ -->
+  <div class="section-label">Before You Start</div>
+  <div class="prereq-box">
+    <div class="prereq-step">
+      <div class="prereq-num">1</div>
+      <div class="prereq-text">Log into <strong>GravityZone Control Center</strong> &rarr; left sidebar &rarr; <strong>Policies</strong>.</div>
+    </div>
+    <div class="prereq-step">
+      <div class="prereq-num">2</div>
+      <div class="prereq-text">Locate the <strong>Default</strong> policy (read-only). Click the <strong>Clone</strong> button (top-right menu). Rename the clone: <strong>Advatek SMB Standard</strong>. Save.</div>
+    </div>
+    <div class="prereq-step">
+      <div class="prereq-num">3</div>
+      <div class="prereq-text">Open <strong>Advatek SMB Standard</strong> for editing. Work through every section below in order. Do <strong>not</strong> save until all sections are complete — or save section-by-section if the session may time out.</div>
+    </div>
+    <div class="prereq-step">
+      <div class="prereq-num">4</div>
+      <div class="prereq-text">After saving: assign to a <strong>single test endpoint</strong> first. Confirm agent health, definition currency, and Security Center registration before fleet-wide assignment.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 1 — GENERAL > DETAILS                  -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">1 — General &rsaquo; Details</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav">General <span class="sep">›</span> <span class="leaf">Details</span></div>
+      <div class="config-title">Policy Identity</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Policy Name</td>
+        <td class="col-value"><strong>Advatek SMB Standard</strong></td>
+        <td class="col-note">Consistent naming — do not abbreviate</td>
+      </tr>
+      <tr>
+        <td class="col-field">Description</td>
+        <td class="col-value">SMB Standard workstation policy — General business environments. Advatek Technology Solution. April 2026.</td>
+        <td class="col-note">Include the date so you know when it was last reviewed</td>
+      </tr>
+      <tr>
+        <td class="col-field">Allow other users to change this policy</td>
+        <td class="col-value"><span class="badge b-off">Unchecked</span></td>
+        <td class="col-note">Lock to policy owner (you). Prevents accidental edits from other GZ users</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 2 — AGENT > SETTINGS                   -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">2 — Agent &rsaquo; Settings</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav">Agent <span class="sep">›</span> <span class="leaf">Settings</span></div>
+      <div class="config-title">Uninstall Password &amp; Display</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Use uninstall password</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Prevents local admins and end users from removing the BEST agent without Advatek credentials</td>
+      </tr>
+      <tr>
+        <td class="col-field">Password</td>
+        <td class="col-value"><em>Set from internal vault</em></td>
+        <td class="col-note">Use the Advatek standard GZ uninstall password. Do not store in GZ notes or Syncro asset fields</td>
+      </tr>
+      <tr>
+        <td class="col-field">Allow endpoints to send user login data to GravityZone</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Shows logged-in username in GZ Network view alongside the endpoint — speeds up incident triage</td>
+      </tr>
+      <tr>
+        <td class="col-field">Show Bitdefender icon in system tray</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Visible to SMB users — they can confirm protection is running. Different from HC (hidden) because SMB users are not in a clinical workflow</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="inline-note">
+    <strong>Notifications sub-section (Agent &rsaquo; Settings &rsaquo; Notifications):</strong> Set Alert pop-ups (require user action) to <strong>Off</strong>. Set Notification pop-ups (informational) to <strong>Off</strong>. Set Endpoint Issues Visibility to <strong>On</strong>. Set Endpoint Restart Notifications to <strong>On</strong>. All alert routing goes to the GZ console — not the end user's screen.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 3 — AGENT > UPDATE                     -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">3 — Agent &rsaquo; Update</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav">Agent <span class="sep">›</span> <span class="leaf">Update</span></div>
+      <div class="config-title">Update Intervals &amp; Ring</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Security Content Update — Interval</td>
+        <td class="col-value"><strong>1 hour</strong></td>
+        <td class="col-note">Definition updates every hour — keeps threat signatures current without excessive network traffic</td>
+      </tr>
+      <tr>
+        <td class="col-field">Product Update — Interval</td>
+        <td class="col-value"><strong>1 hour</strong></td>
+        <td class="col-note">Agent binary updates on the same cadence as definitions</td>
+      </tr>
+      <tr>
+        <td class="col-field">Update Ring</td>
+        <td class="col-value"><span class="badge b-on">Slow Ring</span></td>
+        <td class="col-note">Stable, fully-tested releases only. Fast ring is only appropriate if you have a staging machine to absorb compatibility issues first</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 4 — ANTIMALWARE > ON-ACCESS            -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">4 — Antimalware &rsaquo; On-Access</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav">Antimalware <span class="sep">›</span> <span class="leaf">On-Access</span></div>
+      <div class="config-title">Real-Time File Scanning</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">On-Access Scanning</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Master toggle — must be on</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan mode</td>
+        <td class="col-value"><span class="badge b-custom">Custom</span></td>
+        <td class="col-note">Select Custom — then configure individual options below. Do not use Permissive or Aggressive presets</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan local files</td>
+        <td class="col-value"><strong>All files</strong></td>
+        <td class="col-note">No extension filtering — scan everything on local drives</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan network files</td>
+        <td class="col-value"><strong>All files</strong></td>
+        <td class="col-note">Catches threats coming in via mapped drives and UNC shares</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan only new and changed files</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Reduces CPU load on repeat file access; full sweep happens in weekly on-demand scan</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan boot sectors</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Catches bootkit and MBR-level threats</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan process memory</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Detects in-memory and fileless malware that never touches disk</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan for keyloggers</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan for potentially unwanted applications (PUA)</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Catches adware, toolbars, bundled software — common in SMB environments</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan inside archives</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Enable archive scanning — set limits below to manage performance</td>
+      </tr>
+      <tr>
+        <td class="col-field">&nbsp;&nbsp;&nbsp;Max archive size</td>
+        <td class="col-value"><strong>100 MB</strong></td>
+        <td class="col-note">Archives larger than 100 MB are skipped on-access — covered by weekly full scan</td>
+      </tr>
+      <tr>
+        <td class="col-field">&nbsp;&nbsp;&nbsp;Max archive depth</td>
+        <td class="col-value"><strong>16</strong></td>
+        <td class="col-note">16 nesting levels — sufficient for all real-world archives</td>
+      </tr>
+      <tr>
+        <td class="col-field">Deferred scanning</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Delays scan of files opened during high-CPU periods — reduces user-visible slowdowns</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for infected objects</td>
+        <td class="col-value"><span class="badge b-warn">Quarantine</span></td>
+        <td class="col-note">Quarantine, not Remediate. Preserves file for MSP review. Prevents false-positive data loss on business apps. Set both primary and secondary action to Quarantine</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for PUA</td>
+        <td class="col-value"><span class="badge b-warn">Quarantine</span></td>
+        <td class="col-note">Same rationale — review before permanent deletion</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 5 — ANTIMALWARE > ON-EXECUTE           -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">5 — Antimalware &rsaquo; On-Execute</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav">Antimalware <span class="sep">›</span> <span class="leaf">On-Execute</span></div>
+      <div class="config-title">Advanced Threat Control, Fileless, Ransomware</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Cloud-based Threat Detection</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Submits file hashes to Bitdefender cloud for instant threat lookup — zero local performance cost</td>
+      </tr>
+
+      <tr><td colspan="3" style="background:var(--bg); padding:8px 16px; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mid);">Advanced Threat Control (ATC)</td></tr>
+      <tr>
+        <td class="col-field">Advanced Threat Control</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Master toggle for ATC — must be on</td>
+      </tr>
+      <tr>
+        <td class="col-field">Detection sensitivity</td>
+        <td class="col-value"><span class="badge b-on">Normal</span></td>
+        <td class="col-note">Normal for SMB workloads. Aggressive increases coverage but increases false positives against business apps and custom LOB software. Upgrade to Aggressive only for specific high-risk clients via a separate policy clone</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for infected applications</td>
+        <td class="col-value"><span class="badge b-warn">Quarantine</span></td>
+        <td class="col-note">Consistent with On-Access action — quarantine for MSP review</td>
+      </tr>
+      <tr>
+        <td class="col-field">Sensitive Registry Protection</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Protects SAM database and critical registry keys from credential dumping tools (Mimikatz, etc.)</td>
+      </tr>
+      <tr>
+        <td class="col-field">&nbsp;&nbsp;&nbsp;Action</td>
+        <td class="col-value"><span class="badge b-kill">Kill process</span></td>
+        <td class="col-note">Terminate the offending process immediately — no user prompt</td>
+      </tr>
+      <tr>
+        <td class="col-field">Kernel-API Monitoring</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Detects threats that operate at kernel API level — rootkits, injectors, advanced persistence mechanisms</td>
+      </tr>
+
+      <tr><td colspan="3" style="background:var(--bg); padding:8px 16px; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mid);">Fileless Attack Protection</td></tr>
+      <tr>
+        <td class="col-field">Fileless Attack Protection</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Blocks malware executing entirely in memory — no file on disk to detect with traditional scanning</td>
+      </tr>
+      <tr>
+        <td class="col-field">Command-line Scanner</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Scans command-line arguments at execution time — catches obfuscated PowerShell, WMI, and LOLBin abuse</td>
+      </tr>
+      <tr>
+        <td class="col-field">Antimalware Scan Interface (AMSI) Security Provider</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Integrates with Windows AMSI — scans PowerShell, VBScript, JavaScript at runtime before execution. Pairs directly with SMB-INIT-008 PowerShell Script Block Logging</td>
+      </tr>
+      <tr>
+        <td class="col-field">Report analysis results to AMSI</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Feeds GZ detection results back into the AMSI pipeline for correlated visibility</td>
+      </tr>
+
+      <tr><td colspan="3" style="background:var(--bg); padding:8px 16px; font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--mid);">Ransomware Mitigation</td></tr>
+      <tr>
+        <td class="col-field">Ransomware Mitigation</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Master toggle — must be on. Requires ATC and On-Access to be active (both are)</td>
+      </tr>
+      <tr>
+        <td class="col-field">EFS Protection</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Blocks ransomware from using Windows Encrypted File System as an encryption mechanism</td>
+      </tr>
+      <tr>
+        <td class="col-field">Monitor — Local</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Detects ransomware attacks initiated on the local endpoint. Required for all workstations</td>
+      </tr>
+      <tr>
+        <td class="col-field">Monitor — Remote (Network Shares)</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Detects ransomware coming from another machine over the network — catches lateral ransomware spread across mapped drives</td>
+      </tr>
+      <tr>
+        <td class="col-field">Recovery</td>
+        <td class="col-value"><span class="badge b-on">Automatic</span></td>
+        <td class="col-note">Files restored immediately on detection. No MSP manual intervention required. On-demand option would require MSP to manually trigger recovery from the GZ Reports &rarr; Ransomware Activity page within 30 days — automatic is the right choice for SMB</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 6 — ANTIMALWARE > ANTI-TAMPERING       -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">6 — Antimalware &rsaquo; Anti-Tampering</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav">Antimalware <span class="sep">›</span> <span class="leaf">Anti-Tampering</span></div>
+      <div class="config-title">Agent Self-Protection</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Anti-Tampering</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Master toggle — must be on. Protects the BEST agent from being disabled, killed, or bypassed by malware or an attacker with local access</td>
+      </tr>
+      <tr>
+        <td class="col-field">Vulnerable drivers — Pre-Tampering</td>
+        <td class="col-value"><span class="badge b-block">Deny access</span></td>
+        <td class="col-note">Blocks known vulnerable kernel drivers that are commonly used to disable EDR/AV agents (Bring Your Own Vulnerable Driver attacks)</td>
+      </tr>
+      <tr>
+        <td class="col-field">Callback evasion — Post-Tampering</td>
+        <td class="col-value"><span class="badge b-block">Isolate endpoint — Immediately</span></td>
+        <td class="col-note">If the agent is actively being disabled, the endpoint is network-isolated instantly. Prevents lateral movement and C2 communication during an active attack</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 7 — ANTIMALWARE > ON-DEMAND            -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">7 — Antimalware &rsaquo; On-Demand</div>
+  <div class="inline-note blue">Two scan tasks must be created: a <strong>Weekly Full Scan</strong> and a <strong>Daily Quick Scan</strong>. Click <strong>Add Task</strong> for each. The default policy has no scan tasks — this is one of the most significant gaps being corrected.</div>
+
+  <div class="config-block" style="margin-top: 12px;">
+    <div class="config-header">
+      <div class="config-nav">Antimalware <span class="sep">›</span> On-Demand <span class="sep">›</span> <span class="leaf">Add Task — Weekly Full Scan</span></div>
+      <div class="config-title">Weekly Full Scan — Sunday 02:00 AM</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Task name</td>
+        <td class="col-value"><strong>SMB Weekly Full Scan</strong></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Schedule — Recurrence</td>
+        <td class="col-value"><strong>Weekly</strong></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Schedule — Day</td>
+        <td class="col-value"><strong>Sunday</strong></td>
+        <td class="col-note">Avoids Monday morning — SMB-WEEK scripts run Monday 02:00; keeping scans on separate days prevents resource contention</td>
+      </tr>
+      <tr>
+        <td class="col-field">Schedule — Time</td>
+        <td class="col-value"><strong>02:00 AM</strong></td>
+        <td class="col-note">Pre-business hours; workstations must be left powered on overnight for this to run</td>
+      </tr>
+      <tr>
+        <td class="col-field">If missed, run as soon as possible</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Catches endpoints that were off during the scheduled window</td>
+      </tr>
+      <tr>
+        <td class="col-field">Run with low priority</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Prevents scan from degrading performance if a user is working early</td>
+      </tr>
+      <tr>
+        <td class="col-field">CPU usage control</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Enable and set to Low — longer scan time is acceptable to preserve endpoint responsiveness</td>
+      </tr>
+      <tr>
+        <td class="col-field">Sensitivity</td>
+        <td class="col-value"><strong>Normal</strong></td>
+        <td class="col-note">Consistent with On-Access sensitivity</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan — All files</td>
+        <td class="col-value"><span class="badge b-on">Selected</span></td>
+        <td class="col-note">Full file type coverage — not extension-filtered</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan inside archives</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">&nbsp;&nbsp;&nbsp;Max archive size</td>
+        <td class="col-value"><strong>150 MB</strong></td>
+        <td class="col-note">Larger limit than on-access (150 vs 100 MB) — low-priority scan can afford the extra time</td>
+      </tr>
+      <tr>
+        <td class="col-field">&nbsp;&nbsp;&nbsp;Max archive depth</td>
+        <td class="col-value"><strong>2</strong></td>
+        <td class="col-note">Limit nesting depth on full scan to manage scan duration</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan boot sectors</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan memory</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan UEFI</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Catches UEFI-resident implants — rare but increasingly used in advanced attacks</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan cookies</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan registry</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Catches registry-resident malware and persistence keys</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan only new and changed files</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Reduces scan duration significantly on subsequent runs</td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan for rootkits</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan for PUA</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan for keyloggers</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan network shares</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Scans mapped drives — catches threats that landed on a share before GZ was deployed</td>
+      </tr>
+      <tr>
+        <td class="col-field">Resume scan after product update</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Resumes interrupted scan if a BEST update fires mid-scan</td>
+      </tr>
+      <tr>
+        <td class="col-field">Preserve last access time</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note">Prevents scan from modifying file timestamps — important for forensic integrity</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for infected objects</td>
+        <td class="col-value"><span class="badge b-warn">Quarantine</span></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for rootkits</td>
+        <td class="col-value"><span class="badge b-on">Remediate</span></td>
+        <td class="col-note">Rootkits warrant full remediation — they are never legitimate software</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for PUA</td>
+        <td class="col-value"><span class="badge b-warn">Quarantine</span></td>
+        <td class="col-note"></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="config-block" style="margin-top: 1px;">
+    <div class="config-header">
+      <div class="config-nav">Antimalware <span class="sep">›</span> On-Demand <span class="sep">›</span> <span class="leaf">Add Task — Daily Quick Scan</span></div>
+      <div class="config-title">Daily Quick Scan — 12:00 PM</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Task name</td>
+        <td class="col-value"><strong>SMB Daily Quick Scan</strong></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Scan type</td>
+        <td class="col-value"><strong>Quick Scan</strong></td>
+        <td class="col-note">Use the predefined Quick Scan option — leave all settings at their defaults. Detects active malware running in memory. Typically completes in under 60 seconds</td>
+      </tr>
+      <tr>
+        <td class="col-field">Schedule — Recurrence</td>
+        <td class="col-value"><strong>Daily — All days</strong></td>
+        <td class="col-note"></td>
+      </tr>
+      <tr>
+        <td class="col-field">Schedule — Time</td>
+        <td class="col-value"><strong>12:00 PM</strong></td>
+        <td class="col-note">Midday — machine is guaranteed to be on. Impact is negligible (under 60 seconds, low priority)</td>
+      </tr>
+      <tr>
+        <td class="col-field">If missed, run as soon as possible</td>
+        <td class="col-value"><span class="badge b-on">Checked</span></td>
+        <td class="col-note"></td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SECTION 8 — NETWORK PROTECTION                 -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">8 — Network Protection</div>
+  <div class="inline-note blue">Network Protection modules are included in the core GravityZone license — they are not add-ons. However, they default to <strong>Report only</strong>, not Block. Every sub-module below must be switched to Block manually.</div>
+
+  <div class="config-block" style="margin-top: 12px;">
+    <div class="config-header">
+      <div class="config-nav">Network Protection <span class="sep">›</span> <span class="leaf">Web Protection — Antiphishing</span></div>
+      <div class="config-title">Antiphishing</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Antiphishing</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Master toggle — must be on</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Change from default Report to Block. Phishing pages are stopped before the user can interact with them</td>
+      </tr>
+      <tr>
+        <td class="col-field">Fraud protection</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Blocks fraudulent sites (fake banking, fake support, scareware)</td>
+      </tr>
+      <tr>
+        <td class="col-field">Phishing protection</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Blocks credential-harvesting pages regardless of URL reputation</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="config-block" style="margin-top: 1px;">
+    <div class="config-header">
+      <div class="config-nav">Network Protection <span class="sep">›</span> <span class="leaf">Web Protection — Web Traffic Scan</span></div>
+      <div class="config-title">Web Traffic Scan</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Web Traffic Scan</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Scans all inbound HTTP/HTTPS traffic for malicious payloads</td>
+      </tr>
+      <tr>
+        <td class="col-field">Action for infected websites</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Change from default Report to Block. Connection dropped at the network level before content reaches the browser</td>
+      </tr>
+      <tr>
+        <td class="col-field">TLS handshake interception</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Inspects TLS SNI/handshake data to evaluate HTTPS destinations without full SSL inspection. Users see an Access Denied page on blocked sites</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="config-block" style="margin-top: 1px;">
+    <div class="config-header">
+      <div class="config-nav">Network Protection <span class="sep">›</span> <span class="leaf">Network Attacks — Network Attack Defense</span></div>
+      <div class="config-title">Network Attack Defense (NAD)</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Network Attack Defense</td>
+        <td class="col-value"><span class="badge b-on">Enabled</span></td>
+        <td class="col-note">Master toggle — must be on</td>
+      </tr>
+      <tr>
+        <td class="col-field">Initial Access techniques</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Covers network-based exploitation attempts (EternalBlue, SMB relay, etc.)</td>
+      </tr>
+      <tr>
+        <td class="col-field">Credential Access techniques</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Covers brute force, pass-the-hash, Kerberoasting over the network</td>
+      </tr>
+      <tr>
+        <td class="col-field">Discovery techniques</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Covers network scanning and enumeration from an attacker foothold</td>
+      </tr>
+      <tr>
+        <td class="col-field">Lateral Movement techniques</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Covers SMB-based lateral movement, WMI exec, PsExec patterns over the network</td>
+      </tr>
+      <tr>
+        <td class="col-field">Crimeware techniques</td>
+        <td class="col-value"><span class="badge b-block">Block</span></td>
+        <td class="col-note">Covers C2 communication patterns, ransomware propagation, botnet traffic</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="inline-note" style="margin-top:1px;">
+    <strong>Content Control (Web Filtering):</strong> Leave unconfigured at SMB Standard tier. Web category blocking is not applied by default — no business justification to restrict browsing categories across all SMB clients. Enable per-client on request with specific category rules. Blocking without client approval creates unnecessary support load.
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- EXCLUDED MODULES                               -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">Excluded Modules — Do Not Configure</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav"><span class="leaf">Intentional Exclusions</span></div>
+      <div class="config-title">Modules deliberately omitted from SMB Standard</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">HyperDetect</td>
+        <td class="col-value"><span class="badge b-skip">Do Not Enable</span></td>
+        <td class="col-note">Billable add-on (Advanced Threat Security). Enabling in the policy without confirming licensing triggers unexpected charges in Syncro billing. Excluded from SMB Standard tier. Upsell to clients who want it</td>
+      </tr>
+      <tr>
+        <td class="col-field">Sandbox Analyzer</td>
+        <td class="col-value"><span class="badge b-skip">Do Not Enable</span></td>
+        <td class="col-note">Part of the Advanced Threat Security add-on — same billing consideration as HyperDetect</td>
+      </tr>
+      <tr>
+        <td class="col-field">Firewall</td>
+        <td class="col-value"><span class="badge b-skip">Do Not Enable</span></td>
+        <td class="col-note">Prior deployment caused complete connectivity outage — all RMM communication was blocked, required on-site remediation. Requires a dedicated staged rollout plan before enabling in any environment. Windows Defender Firewall remains active</td>
+      </tr>
+      <tr>
+        <td class="col-field">Device Control</td>
+        <td class="col-value"><span class="badge b-skip">Do Not Configure</span></td>
+        <td class="col-note">Not applied at SMB Standard tier. Most SMB clients have legitimate USB peripheral use (headsets, scanners, dongles). Enable per-client on explicit request only — reference the Healthcare policy Device Control table as the configuration template</td>
+      </tr>
+      <tr>
+        <td class="col-field">Advanced Anti-Exploit</td>
+        <td class="col-value"><span class="badge b-skip">Not Configured</span></td>
+        <td class="col-note">System-wide protections (process introspection, privilege escalation, LSASS) are covered by ATC. Custom application protection lists require known process names per client — no standard list applies across all SMB environments. Add per-client when specific high-risk applications are identified</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- GZ CONSOLE NOTIFICATIONS                       -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">GravityZone Console — Notification Setup <span class="chip">One-Time Per Account</span></div>
+  <div class="inline-note blue">Notifications are configured at the account level, not per-policy. Navigate to the <strong>bell icon</strong> (top-right) &rarr; <strong>Notification Settings</strong>. Configure once — applies across all policies.</div>
+
+  <div class="config-block" style="margin-top: 12px;">
+    <div class="config-header">
+      <div class="config-nav">Control Center <span class="sep">›</span> <span class="leaf">Notifications</span></div>
+      <div class="config-title">Alert Routing to kit@advatek.com</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">Malware Outbreak</td>
+        <td class="col-value"><span class="badge b-on">On + Email</span></td>
+        <td class="col-note">kit@advatek.com — triggers when multiple endpoints detect the same threat in a short window</td>
+      </tr>
+      <tr>
+        <td class="col-field">Ransomware Detection</td>
+        <td class="col-value"><span class="badge b-on">On + Email</span></td>
+        <td class="col-note">kit@advatek.com — immediate incident response trigger</td>
+      </tr>
+      <tr>
+        <td class="col-field">Anti-Tampering Event</td>
+        <td class="col-value"><span class="badge b-on">On + Email</span></td>
+        <td class="col-note">kit@advatek.com — active attack indicator; escalate immediately</td>
+      </tr>
+      <tr>
+        <td class="col-field">License Expires</td>
+        <td class="col-value"><span class="badge b-on">On + Email</span></td>
+        <td class="col-note">Administrative — renewal action required before expiry</td>
+      </tr>
+      <tr>
+        <td class="col-field">Deployment Reached License Limit</td>
+        <td class="col-value"><span class="badge b-on">On + Email</span></td>
+        <td class="col-note">Administrative — license expansion needed or stale endpoints need cleanup</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- POST-SAVE CHECKLIST                            -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div class="section-label">Post-Save Assignment &amp; Verification</div>
+
+  <div class="config-block">
+    <div class="config-header">
+      <div class="config-nav"><span class="leaf">After Saving the Policy</span></div>
+      <div class="config-title">Assignment &amp; Verification Steps</div>
+    </div>
+    <table class="config-rows">
+      <tr>
+        <td class="col-field">1. Assign to test endpoint</td>
+        <td class="col-value"><span class="badge b-warn">Required</span></td>
+        <td class="col-note">GZ Network &rarr; select one non-production endpoint &rarr; Assign Policy &rarr; Advatek SMB Standard. Wait 5–10 minutes for policy to apply</td>
+      </tr>
+      <tr>
+        <td class="col-field">2. Verify active policy</td>
+        <td class="col-value"></td>
+        <td class="col-note">GZ Network &rarr; click endpoint &rarr; Active policy column must show <strong>Advatek SMB Standard</strong></td>
+      </tr>
+      <tr>
+        <td class="col-field">3. Confirm module presence</td>
+        <td class="col-value"></td>
+        <td class="col-note">Endpoint Protection tab must show: Antimalware, Advanced Threat Control, Network Protection. If missing modules — run Reconfigure Agent (Mode: Add, Scheduler: Now). Reboot may be required</td>
+      </tr>
+      <tr>
+        <td class="col-field">4. Run GZ Standalone Verification script (Syncro)</td>
+        <td class="col-value"></td>
+        <td class="col-note">Confirms EPSecurityService + EPRedLine running, Security Center registered, definitions current. Run manually from Syncro on the test endpoint</td>
+      </tr>
+      <tr>
+        <td class="col-field">5. Fleet assignment</td>
+        <td class="col-value"></td>
+        <td class="col-note">GZ Network &rarr; select SMB company group &rarr; Assign Policy &rarr; Advatek SMB Standard. Policy inherits to all endpoints in the group unless an endpoint has an enforced override</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div>GravityZone SMB Standard Policy — Console Configuration Guide</div>
+    <div>Prepared by <strong>Advatek Technology Solution</strong> &mdash; April 2026</div>
+    <div style="margin-top: 8px;">Bitdefender GravityZone &bull; Endpoint Security &bull; Windows Workstations &bull; CIS Controls v8 Aligned</div>
+    <div style="margin-top: 8px; font-size: 10px;">This document is intended for internal MSP use. It does not constitute legal compliance certification. For regulated environments, refer to the applicable vertical hardening suite.</div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>

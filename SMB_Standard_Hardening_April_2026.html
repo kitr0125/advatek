@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advatek — SMB Standard Hardening</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111827;
+  --slate:  #1f2937;
+  --mid:    #6b7280;
+  --light:  #9ca3af;
+  --border: #e5e7eb;
+  --bg:     #f9fafb;
+  --white:  #ffffff;
+  --accent: #2563eb;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 32px;
+  height: 64px; display: flex; align-items: center; gap: 24px;
+}
+.nav-logo { flex-shrink: 0; text-decoration: none; }
+.nav-logo img { height: 26px; width: auto; display: block; }
+.nav-spacer { flex: 1; }
+.nav-right { display: flex; align-items: center; gap: 16px; }
+.nav-back {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--mid);
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+  transition: color 0.15s;
+}
+.nav-back:hover { color: var(--dark); }
+.nav-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--light);
+}
+.btn-print {
+  background: none; border: 1px solid var(--border);
+  font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--mid);
+  padding: 7px 14px; cursor: pointer; transition: all 0.15s;
+}
+.btn-print:hover { border-color: var(--dark); color: var(--dark); }
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero {
+  background: var(--black);
+  position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,24,42,0.85) 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto;
+  padding: 68px 32px 60px;
+  display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 32px;
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 44px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white);
+  line-height: 1.1; margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3px; line-height: 1.6; max-width: 460px;
+}
+.hero-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.hero-chip {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 5px 12px;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.4);
+}
+.hero-chip.blue { border-color: rgba(37,99,235,0.5); color: #93c5fd; }
+.hero-chip.amber { border-color: rgba(217,119,6,0.5); color: #fcd34d; }
+.hero-chip.green { border-color: rgba(22,163,74,0.5); color: #86efac; }
+
+.hero-stats { display: flex; gap: 40px; }
+.hero-stat { text-align: center; }
+.hs-val {
+  font-size: 32px; font-weight: 700; letter-spacing: -1px;
+  color: var(--white); display: block;
+}
+.hs-lbl {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.25);
+  display: block; margin-top: 4px;
+}
+
+/* ── PAGE ─────────────────────────────────────────────── */
+.page { max-width: 1200px; margin: 0 auto; padding: 48px 32px 80px; }
+
+/* ── SECTION LABEL ────────────────────────────────────── */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--mid);
+  margin-bottom: 20px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.chip {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 3px 10px;
+  border: 1px solid var(--border); color: var(--light);
+  white-space: nowrap;
+}
+
+/* ── KPI GRID ─────────────────────────────────────────── */
+.kpi-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  border: 1px solid var(--border); margin-bottom: 48px;
+}
+.kpi {
+  background: var(--white); padding: 24px 20px;
+  display: flex; flex-direction: column; gap: 6px;
+  border-left: 3px solid transparent;
+}
+.kpi.green { border-left-color: #16a34a; }
+.kpi.blue  { border-left-color: var(--accent); }
+.kpi.amber { border-left-color: #d97706; }
+.kpi-icon { font-size: 18px; margin-bottom: 2px; }
+.kpi-val  { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; color: var(--dark); }
+.kpi-lbl  { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); }
+.kpi-sub  { font-size: 11px; color: var(--light); line-height: 1.5; margin-top: 2px; }
+
+/* ── OVERVIEW CARD ────────────────────────────────────── */
+.overview-card {
+  background: var(--white); border: 1px solid var(--border);
+  padding: 28px 32px; margin-bottom: 48px;
+}
+.overview-card p {
+  font-size: 13px; color: var(--mid); line-height: 1.8; margin-bottom: 12px;
+}
+.overview-card p:last-child { margin-bottom: 0; }
+
+/* ── FLAT CARD / TABLE ────────────────────────────────── */
+.flat-card {
+  background: var(--white); border: 1px solid var(--border); margin-bottom: 48px;
+}
+.tbl-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.data-table thead tr { background: var(--dark); }
+.data-table thead th {
+  padding: 11px 16px; text-align: left;
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,0.55);
+  white-space: nowrap;
+}
+.data-table tbody tr { border-bottom: 1px solid var(--border); }
+.data-table tbody tr:last-child { border-bottom: none; }
+.data-table tbody tr:hover { background: var(--bg); }
+.data-table td { padding: 12px 16px; color: var(--mid); line-height: 1.5; vertical-align: top; }
+.data-table td:first-child { color: var(--dark); font-weight: 600; white-space: nowrap; }
+
+.badge { display: inline-flex; align-items: center; }
+.b-init {
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; background: #111827; color: #fff;
+}
+.b-week {
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; background: #2563eb; color: #fff;
+}
+.b-rem {
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; background: #16a34a; color: #fff;
+}
+.b-solo {
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 8px; background: #7c3aed; color: #fff;
+}
+
+/* ── DARK PANEL ───────────────────────────────────────── */
+.dark-panel {
+  background: var(--dark); padding: 32px; margin-bottom: 48px;
+}
+.dark-panel-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  margin-bottom: 24px;
+}
+.dark-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+}
+.dark-item { display: flex; gap: 14px; align-items: flex-start; }
+.dark-item-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.dark-item-title {
+  font-size: 12px; font-weight: 700; color: var(--white);
+  margin-bottom: 4px; letter-spacing: 0.3px;
+}
+.dark-item-sub { font-size: 11px; color: rgba(255,255,255,0.35); line-height: 1.6; }
+
+/* ── DEPLOY CARDS ─────────────────────────────────────── */
+.deploy-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+.deploy-card { background: var(--white); padding: 24px; }
+.deploy-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--dark);
+  margin-bottom: 18px; padding-bottom: 12px;
+  border-bottom: 2px solid var(--dark);
+}
+.deploy-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.deploy-item { display: flex; gap: 12px; align-items: flex-start; }
+.deploy-item-num {
+  min-width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff; flex-shrink: 0;
+}
+.deploy-item-num.blue  { background: var(--dark); }
+.deploy-item-num.green { background: #16a34a; }
+.deploy-item-num.purple { background: #7c3aed; }
+.deploy-item-content { flex: 1; }
+.deploy-item-title { font-size: 12px; font-weight: 600; color: var(--dark); }
+.deploy-item-sub   { font-size: 11px; color: var(--light); margin-top: 2px; line-height: 1.5; }
+.deploy-note {
+  margin-top: 16px; font-size: 11px; color: var(--light);
+  line-height: 1.6; padding-top: 12px; border-top: 1px solid var(--border);
+}
+
+/* ── SCOPE GRID ───────────────────────────────────────── */
+.scope-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+.scope-card { background: var(--white); padding: 24px; }
+.scope-title {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--dark);
+  margin-bottom: 14px; padding-bottom: 10px;
+  border-bottom: 2px solid var(--dark);
+}
+.scope-title.blue  { border-bottom-color: var(--accent); color: var(--accent); }
+.scope-title.green { border-bottom-color: #16a34a; color: #16a34a; }
+.scope-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.scope-list li {
+  font-size: 12px; color: var(--mid); line-height: 1.5;
+  padding-left: 14px; position: relative;
+}
+.scope-list li::before { content: '—'; position: absolute; left: 0; color: var(--light); font-size: 9px; }
+.scope-list li strong { color: var(--slate); }
+.scope-note { font-size: 11px; color: var(--light); margin-top: 14px; line-height: 1.5; font-style: italic; }
+
+/* ── NOTES / GAPS ─────────────────────────────────────── */
+.gap-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+.gap-card { background: var(--white); padding: 20px 24px; border-left: 3px solid var(--border); }
+.gap-card.red    { border-left-color: #dc2626; }
+.gap-card.amber  { border-left-color: #d97706; }
+.gap-card.blue   { border-left-color: var(--accent); }
+.gap-card.green  { border-left-color: #16a34a; }
+.gap-title { font-size: 11px; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+.gap-desc  { font-size: 12px; color: var(--mid); line-height: 1.6; margin-bottom: 8px; }
+.gap-rec   { font-size: 11px; color: var(--light); line-height: 1.5; }
+
+/* ── FIELD GRID ───────────────────────────────────────── */
+.field-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+.field-card { background: var(--white); padding: 14px 16px; }
+.field-name { font-size: 12px; font-weight: 600; color: var(--dark); margin-bottom: 3px; }
+.field-used { font-size: 10px; color: var(--light); }
+
+/* ── FOOTER ───────────────────────────────────────────── */
+.report-footer {
+  margin-top: 48px; padding-top: 24px;
+  border-top: 1px solid var(--border);
+  font-size: 11px; color: var(--light);
+  text-align: center; line-height: 2;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 900px) {
+  .kpi-grid   { grid-template-columns: repeat(2, 1fr); }
+  .dark-grid  { grid-template-columns: 1fr; }
+  .deploy-grid { grid-template-columns: 1fr; }
+  .scope-grid { grid-template-columns: 1fr; }
+  .gap-grid   { grid-template-columns: 1fr; }
+  .field-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .nav-inner { padding: 0 16px; }
+  .hero-inner { padding: 40px 20px 36px; }
+  .hero h1 { font-size: 28px; letter-spacing: 2px; }
+  .hero-stats { gap: 24px; }
+  .page { padding: 32px 16px 48px; }
+  .kpi-grid { grid-template-columns: 1fr; }
+  .field-grid { grid-template-columns: 1fr; }
+}
+
+@media print {
+  nav, .btn-print { display: none; }
+  .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .dark-panel { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </a>
+    <div class="nav-spacer"></div>
+    <div class="nav-right">
+      <a class="nav-back" href="index.html">&#8592;&nbsp;Portal</a>
+      <span class="nav-label">Security Documentation</span>
+      <button class="btn-print" onclick="window.print()">&#128438; Print</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Advatek Technology Solution &mdash; Security Hardening</div>
+      <h1>SMB Standard<br>Hardening Policy</h1>
+      <div class="hero-sub">Workstation Hardening, Monitoring &amp; Remediation Scripts &mdash; Configuration Reference &mdash; April 2026</div>
+      <div class="hero-chips">
+        <span class="hero-chip green">CIS Controls v8 Aligned</span>
+        <span class="hero-chip">Syncro RMM</span>
+        <span class="hero-chip">PowerShell Automation</span>
+        <span class="hero-chip">Windows 11</span>
+        <span class="hero-chip amber">Non-HIPAA &bull; Non-Regulated Environments</span>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hs-val">9</span>
+        <span class="hs-lbl">Init Scripts</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">5</span>
+        <span class="hs-lbl">Weekly Checks</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hs-val">3</span>
+        <span class="hs-lbl">Remediation</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- OVERVIEW -->
+  <div class="section-label">Overview</div>
+  <div class="overview-card">
+    <p>This document details the Syncro RMM automation suite built and validated by Advatek Technology Solution in April 2026 for standard small and medium business workstation deployments. It covers baseline provisioning, ongoing compliance monitoring, and on-demand remediation for non-regulated environments.</p>
+    <p>The suite is divided into three categories: 9 one-time initialization scripts run at provisioning, 5 weekly monitoring scripts scheduled every Monday at 2:00 AM that auto-create tickets on findings, and 3 on-demand remediation scripts run manually from those tickets. All scripts are idempotent where possible — safe to re-run on existing workstations without causing harm.</p>
+    <p>This suite is designed for standard business clients — construction, trades, retail, professional services, and similar environments — that are not subject to HIPAA, legal privilege requirements, or other regulated compliance frameworks. For regulated environments, refer to the Healthcare Hardening Policy documentation.</p>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-grid">
+    <div class="kpi green">
+      <div class="kpi-icon">🔧</div>
+      <div class="kpi-val">9</div>
+      <div class="kpi-lbl">Init Scripts</div>
+      <div class="kpi-sub">Run once at provisioning — idempotent, safe on existing machines</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-icon">📅</div>
+      <div class="kpi-val">5</div>
+      <div class="kpi-lbl">Weekly Checks</div>
+      <div class="kpi-sub">Scheduled Monday 02:00 — auto-tickets on findings</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-icon">🛠️</div>
+      <div class="kpi-val">3</div>
+      <div class="kpi-lbl">Remediation Scripts</div>
+      <div class="kpi-sub">Run manually from tickets — service restarts and disk cleanup</div>
+    </div>
+    <div class="kpi amber">
+      <div class="kpi-icon">🔍</div>
+      <div class="kpi-val">1</div>
+      <div class="kpi-lbl">Standalone</div>
+      <div class="kpi-sub">GravityZone verification — run after agent deployment</div>
+    </div>
+  </div>
+
+  <!-- SCOPE -->
+  <div class="section-label">Scope &amp; Applicability</div>
+  <div class="scope-grid">
+    <div class="scope-card">
+      <div class="scope-title">Applies To</div>
+      <ul class="scope-list">
+        <li><strong>Environment</strong> — Non-regulated small and medium businesses</li>
+        <li><strong>Examples</strong> — Construction, trades, retail, manufacturing, professional services</li>
+        <li><strong>Domain</strong> — Domain-joined and workgroup configurations</li>
+        <li><strong>Platform</strong> — Windows 11 workstations (23H2 / 24H2)</li>
+        <li><strong>M365</strong> — Microsoft 365 business tenants</li>
+        <li><strong>AV</strong> — Bitdefender GravityZone (Antimalware enabled)</li>
+      </ul>
+    </div>
+    <div class="scope-card">
+      <div class="scope-title blue">Framework Alignment</div>
+      <ul class="scope-list">
+        <li><strong>CIS Controls v8</strong> — Level 1 baseline</li>
+        <li><strong>Microsoft Security Baseline</strong> — Windows 11</li>
+        <li><strong>NIST CSF</strong> — Identify, Protect, Detect functions</li>
+        <li><strong>Password Policy</strong> — 180-day max, 10-char min, complexity enforced</li>
+        <li><strong>Lockout Policy</strong> — 5 attempts, 30-minute auto-unlock</li>
+        <li><strong>Patch Management</strong> — Auto-install daily at 3AM</li>
+      </ul>
+    </div>
+    <div class="scope-card">
+      <div class="scope-title">Does Not Apply To</div>
+      <ul class="scope-list">
+        <li><strong>Healthcare</strong> — Use HC- script suite (HIPAA aligned)</li>
+        <li><strong>Legal / Finance</strong> — Dedicated vertical suite planned</li>
+        <li><strong>Servers</strong> — Separate server hardening baseline required</li>
+        <li><strong>macOS / Linux</strong> — Windows only</li>
+        <li><strong>BitLocker</strong> — Not enforced at this tier (HC only)</li>
+        <li><strong>HIPAA Audit Policy</strong> — HC only</li>
+      </ul>
+      <div class="scope-note">For compliance-regulated clients, escalate to the appropriate vertical hardening suite.</div>
+    </div>
+  </div>
+
+  <!-- SCRIPT INVENTORY -->
+  <div class="section-label">Script Inventory <span class="chip">18 Total</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Script ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>CIS Alignment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SMB-INIT-001</td>
+            <td>Local Admin Setup</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Creates advadmin / Advatek Support account. Disables built-in Administrator and Guest. Verifies Administrators group membership. Safe to re-run.</td>
+            <td>CIS Control 4 — Privileged Access</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-002</td>
+            <td>Power Plan &amp; Sleep Settings</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Sets High Performance power plan. Disables sleep and standby timeouts. Detects laptops and flags hibernate changes. GUID fallback if plan not found by ID.</td>
+            <td>Operational baseline</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-003</td>
+            <td>Password &amp; Lockout Policy</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>180-day max password age, 10-char minimum, 10-history, complexity via secedit, 5-attempt lockout, 30-min auto-unlock. Configures Windows Update auto-install daily at 3AM.</td>
+            <td>CIS Control 5 — Account Management</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-004</td>
+            <td>Windows Security Hardening</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Disables SMBv1, enforces SMB signing, NTLMv2, disables WDigest, enables LSASS RunAsPPL, disables TLS 1.0/1.1 and SSL 2.0/3.0, disables NetBIOS, LLMNR, and AutoRun.</td>
+            <td>CIS Controls 4, 12, 16</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-005</td>
+            <td>Workstation Lock &amp; Screen Timeout</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Machine-level 15-minute inactivity lock via screensaver policy and InactivityTimeoutSecs. Hides last username on logon screen. Disables Fast User Switching. Sets monitor timeout.</td>
+            <td>CIS Control 4 — Session Management</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-006</td>
+            <td>RDP Security Hardening</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Enforces NLA, high encryption, 15-min idle timeout, 5-min disconnected session cleanup, disables printer/clipboard redirection, audits Remote Desktop Users group, requires shadowing consent.</td>
+            <td>CIS Control 4, 12</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-007</td>
+            <td>Disable Unnecessary Services &amp; Features</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Disables Remote Registry, WinRM, Xbox services, Secondary Logon, Fax, Windows Insider, DiagTrack. Removes SMBv1, PowerShell v2, Telnet, TFTP, and Internet Explorer features.</td>
+            <td>CIS Control 4 — Attack Surface Reduction</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-008</td>
+            <td>PowerShell Security Hardening</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Sets execution policy to RemoteSigned. Enables Script Block Logging (Event 4104), Module Logging (all modules), and Transcription to C:\ProgramData\PowerShellLogs. ACL-restricts log directory. Verifies registry after applying.</td>
+            <td>CIS Control 8 — Audit Log Management</td>
+          </tr>
+          <tr>
+            <td>SMB-INIT-009</td>
+            <td>Windows 11 Debloat</td>
+            <td><span class="badge b-init">Init</span></td>
+            <td>Removes preinstalled consumer bloatware — Bing apps, Solitaire, Xbox suite, LinkedIn, TikTok, Spotify, Disney, Netflix, Candy Crush, OEM trials. Preserves all M365 components. Disables Start menu ads and Wi-Fi Sense. Supports -DryRun.</td>
+            <td>CIS Control 4 — Attack Surface Reduction</td>
+          </tr>
+          <tr>
+            <td>Standalone</td>
+            <td>GravityZone Status Verification</td>
+            <td><span class="badge b-solo">Standalone</span></td>
+            <td>Verifies GravityZone agent installation, service state, Security Center registration, definition currency, and agent version. Run manually after GravityZone deployment — not at provisioning. Creates ticket on failure.</td>
+            <td>CIS Control 10 — Malware Defenses</td>
+          </tr>
+          <tr>
+            <td>SMB-WEEK-001</td>
+            <td>Admin Account Audit</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Audits Administrators group. Flags unexpected accounts. Verifies advadmin present and enabled. Confirms built-in Administrator and Guest are disabled. High priority ticket on any finding.</td>
+            <td>CIS Control 5 — Account Management</td>
+          </tr>
+          <tr>
+            <td>SMB-WEEK-002</td>
+            <td>Patch Compliance Check</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Checks WU service health, days since last install, pending updates with Critical/Important flagging, WU policy registry, and pending reboot. Critical ticket for security patches or disabled WU service.</td>
+            <td>CIS Control 7 — Continuous Vulnerability Management</td>
+          </tr>
+          <tr>
+            <td>SMB-WEEK-003</td>
+            <td>GravityZone Health Check</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Verifies EPSecurityService and EPRedLine state, install path, Security Center registration, definition currency against 3-day threshold, and agent version. Critical ticket for service failure or unregistered agent.</td>
+            <td>CIS Control 10 — Malware Defenses</td>
+          </tr>
+          <tr>
+            <td>SMB-WEEK-004</td>
+            <td>Failed Logins &amp; Lockouts</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Scans Security event log 7 days for Event 4625 (failures), 4740 (lockouts), 4648 (explicit credentials). Groups by username, surfaces source IP. Alert at 10 failures, Critical at 25. Verifies audit policy is active.</td>
+            <td>CIS Control 8 — Audit Log Management</td>
+          </tr>
+          <tr>
+            <td>SMB-WEEK-005</td>
+            <td>System Health &amp; Disk Space</td>
+            <td><span class="badge b-week">Weekly</span></td>
+            <td>Checks disk space (15% warn / 5% critical), uptime (high and low — flags nightly power-off pattern), pending reboot with source ID, memory pressure, CPU load at check time, and Syncro agent state.</td>
+            <td>CIS Control 1 — Asset Inventory &amp; Control</td>
+          </tr>
+          <tr>
+            <td>SMB-REM-001</td>
+            <td>Restart GravityZone Agent</td>
+            <td><span class="badge b-rem">Remediation</span></td>
+            <td>Attempts 3 restarts of EPSecurityService and EPRedLine with 30-second wait between attempts. Verifies Security Center re-registration after recovery. Critical ticket if services cannot be recovered.</td>
+            <td>CIS Control 10 — Malware Defenses</td>
+          </tr>
+          <tr>
+            <td>SMB-REM-002</td>
+            <td>Restart Syncro Agent</td>
+            <td><span class="badge b-rem">Remediation</span></td>
+            <td>Locates Syncro service by known names with display name fallback. 3 restart attempts with stability check — detects services that start then crash. Critical ticket if service not found or cannot be recovered.</td>
+            <td>Operational continuity</td>
+          </tr>
+          <tr>
+            <td>SMB-REM-003</td>
+            <td>Temp File Cleanup</td>
+            <td><span class="badge b-rem">Remediation</span></td>
+            <td>Cleans Windows Temp, per-user Temp, Windows Update cache, Prefetch, CBS logs, WER archives, thumbnail caches, and Recycle Bin. Before/after disk space reported. High ticket if drives remain low after cleanup. Supports -DryRun.</td>
+            <td>CIS Control 1 — Asset Management</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- INIT SCRIPTS DETAIL -->
+  <div class="section-label">Initialization Scripts <span class="chip">9 Scripts — Run at Provisioning</span></div>
+  <div class="dark-panel">
+    <div class="dark-panel-title">What Gets Configured at Provisioning</div>
+    <div class="dark-grid">
+      <div class="dark-item">
+        <div class="dark-item-icon">👤</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-001 — Local Admin Setup</div>
+          <div class="dark-item-sub">Creates advadmin / Advatek Support. Disables built-in Administrator and Guest. Verifies Administrators group membership regardless of whether account was just created. Safe to re-run.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">⚡</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-002 — Power Plan</div>
+          <div class="dark-item-sub">High Performance power plan. All sleep/standby timeouts disabled. Detects laptops — flags hibernate disable in notes. GUID fallback if plan not found. Writes to Power Plan Notes asset field.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">🔑</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-003 — Password &amp; Account Policy</div>
+          <div class="dark-item-sub">180-day max age, 10-char min, 10-history, complexity enforced via secedit, 5-attempt lockout, 30-min auto-unlock. Also sets Windows Update auto-install daily at 3AM (AUOptions=4).</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">🛡️</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-004 — Windows Security Hardening</div>
+          <div class="dark-item-sub">SMBv1 off, SMB signing required, NTLMv2 enforced, WDigest disabled, LSASS RunAsPPL enabled, TLS 1.0/1.1 and SSL 2.0/3.0 disabled, NetBIOS and LLMNR disabled, AutoRun blocked. Reboot required for LSASS PPL.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">🔒</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-005 — Workstation Lock</div>
+          <div class="dark-item-sub">Machine-level 15-minute inactivity lock via screensaver policy and InactivityTimeoutSecs registry key — cannot be overridden by end users. Hides last username. Disables Fast User Switching.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">🖥️</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-006 — RDP Security</div>
+          <div class="dark-item-sub">NLA enforced, high encryption, 15-min idle timeout, 5-min disconnected cleanup, printer/clipboard redirection disabled, Remote Desktop Users group audited and cleared, shadowing requires user consent.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">🔧</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-007 — Services &amp; Features</div>
+          <div class="dark-item-sub">Remote Registry disabled. WinRM disabled. Secondary Logon disabled. Xbox services off. SMBv1 feature removed. PowerShell v2 removed (no AMSI). Telnet, TFTP, Internet Explorer removed. Print Spooler left enabled.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">💻</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-008 — PowerShell Security</div>
+          <div class="dark-item-sub">Script Block Logging (Event 4104), Module Logging (all modules), Transcription to C:\ProgramData\PowerShellLogs. ACL-restricted log directory. ExecutionPolicy: RemoteSigned. Registry readback verification after applying.</div>
+        </div>
+      </div>
+      <div class="dark-item">
+        <div class="dark-item-icon">🧹</div>
+        <div>
+          <div class="dark-item-title">SMB-INIT-009 — Windows 11 Debloat</div>
+          <div class="dark-item-sub">Removes Bing apps, Solitaire, Xbox suite, LinkedIn, TikTok, Spotify, Disney, Netflix, Candy Crush, and OEM trials. Preserves all M365 components. Disables Start menu ads, Wi-Fi Sense, sets telemetry to minimum. DryRun supported.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPLOYMENT ORDER -->
+  <div class="section-label">Deployment Order &amp; Schedule</div>
+  <div class="deploy-grid">
+    <div class="deploy-card">
+      <div class="deploy-title">SMB Standard — Provisioning Sequence</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">1</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-001 — Local Admin Setup</div>
+            <div class="deploy-item-sub">Must run first — creates support account before policy locks access</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">2</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-002 — Power Plan</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">3</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-003 — Password &amp; Lockout Policy</div>
+            <div class="deploy-item-sub">Sets Windows Update policy captured in monitoring scripts</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">4</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-004 — Windows Security Hardening</div>
+            <div class="deploy-item-sub">Registry changes take effect immediately — reboot required for LSASS PPL</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">5</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-005 — Workstation Lock</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">6</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-006 — RDP Security</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">7</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-007 — Services &amp; Features</div>
+            <div class="deploy-item-sub">PS v2 and SMBv1 feature removal require reboot to fully complete</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">8</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-008 — PowerShell Security</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num blue">9</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-INIT-009 — Windows 11 Debloat</div>
+            <div class="deploy-item-sub">Run last — consider -DryRun first on new client environments</div>
+          </div>
+        </li>
+      </ul>
+      <div class="deploy-note">&#9888; Schedule a reboot after the full INIT sequence completes. After reboot, run the GravityZone Standalone verification script once GravityZone has been deployed and confirmed installed.</div>
+    </div>
+
+    <div class="deploy-card">
+      <div class="deploy-title">SMB Weekly Compliance Checks &mdash; Monday 02:00</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">
+          <div class="deploy-item-num green">1</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-WEEK-001 — Admin Account Audit</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">2</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-WEEK-002 — Patch Compliance</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">3</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-WEEK-003 — GravityZone Health</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">4</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-WEEK-004 — Failed Logins &amp; Lockouts</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num green">5</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-WEEK-005 — System Health &amp; Disk Space</div>
+          </div>
+        </li>
+      </ul>
+      <div class="deploy-note">All five scripts run in sequence at 2:00 AM Monday. Pre-business hours timing minimizes performance impact. Machines that are powered off will miss that week's run — SMB-WEEK-005 uptime check surfaces consistent low-uptime patterns indicating nightly shutdown. All findings write to Syncro asset fields and auto-create tickets. No manual review required unless a ticket is generated.</div>
+
+      <div class="deploy-title" style="margin-top: 28px;">SMB Remediation Scripts &mdash; Run Manually from Tickets</div>
+      <ul class="deploy-list">
+        <li class="deploy-item">
+          <div class="deploy-item-num purple">R1</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-REM-001 — Restart GravityZone Agent</div>
+            <div class="deploy-item-sub">Triggered from SMB-WEEK-003 tickets</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num purple">R2</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-REM-002 — Restart Syncro Agent</div>
+            <div class="deploy-item-sub">Triggered from SMB-WEEK-005 tickets</div>
+          </div>
+        </li>
+        <li class="deploy-item">
+          <div class="deploy-item-num purple">R3</div>
+          <div class="deploy-item-content">
+            <div class="deploy-item-title">SMB-REM-003 — Temp File Cleanup</div>
+            <div class="deploy-item-sub">Triggered from SMB-WEEK-005 low disk tickets</div>
+          </div>
+        </li>
+      </ul>
+      <div class="deploy-note">Remediation scripts are detection-triggered — run from the ticket that generated the alert, not proactively. Always review the triggering alert before running. All actions are logged to Syncro asset fields for auditability.</div>
+    </div>
+  </div>
+
+  <!-- WEEKLY DETAIL -->
+  <div class="section-label">Weekly Monitoring Scripts <span class="chip">5 Scripts — Monday 02:00</span></div>
+  <div class="flat-card">
+    <div class="tbl-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Script</th>
+            <th>Alert Condition</th>
+            <th>Action on Alert</th>
+            <th>Threshold / Lookback</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>SMB-WEEK-001</strong><br><span style="font-size:11px;color:var(--mid)">Admin Audit</span></td>
+            <td>Unexpected account in Administrators group; advadmin missing or disabled; built-in Administrator enabled; Guest enabled</td>
+            <td>Ticket: High priority<br><span style="font-size:11px;color:var(--light)">Immediate review recommended</span></td>
+            <td>Real-time membership check</td>
+          </tr>
+          <tr>
+            <td><strong>SMB-WEEK-002</strong><br><span style="font-size:11px;color:var(--mid)">Patch Compliance</span></td>
+            <td>WU service disabled; pending Critical/Important updates; last install &gt;30 days; WU policy missing; pending reboot</td>
+            <td>Ticket: Critical (security patches / disabled service) or Medium (general)<br><span style="font-size:11px;color:var(--light)">Lists pending update names</span></td>
+            <td>30 days warning / 60 days critical</td>
+          </tr>
+          <tr>
+            <td><strong>SMB-WEEK-003</strong><br><span style="font-size:11px;color:var(--mid)">GravityZone Health</span></td>
+            <td>EPSecurityService or EPRedLine stopped; install path missing; not registered in Security Center; definitions &gt;3 days old</td>
+            <td>Ticket: Critical (service/registration) or Medium (stale definitions)<br><span style="font-size:11px;color:var(--light)">Lists active AV if GZ unregistered</span></td>
+            <td>3-day definition age threshold</td>
+          </tr>
+          <tr>
+            <td><strong>SMB-WEEK-004</strong><br><span style="font-size:11px;color:var(--mid)">Failed Logins</span></td>
+            <td>Single account exceeds 10 failures; any lockout event; explicit credential logons &gt;50; audit policy not configured</td>
+            <td>Ticket: Critical (&gt;25 failures) or High (&gt;10 failures / lockout)<br><span style="font-size:11px;color:var(--light)">Source IP surfaced per failure group</span></td>
+            <td>7-day lookback; 10 warn / 25 critical</td>
+          </tr>
+          <tr>
+            <td><strong>SMB-WEEK-005</strong><br><span style="font-size:11px;color:var(--mid)">System Health</span></td>
+            <td>Disk &lt;15% free (warning) or &lt;5% free (critical); uptime &gt;30 days; uptime &lt;12 hours (nightly shutdown); pending reboot; memory &lt;15% free; CPU &gt;80% at check time; Syncro agent stopped</td>
+            <td>Ticket: Critical (disk &lt;5%) or Medium<br><span style="font-size:11px;color:var(--light)">Per-drive breakdown, reboot source ID</span></td>
+            <td>15% warn / 5% critical disk; 30-day uptime ceiling; 12-hour uptime floor</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOM FIELDS -->
+  <div class="section-label">Required Syncro Asset Fields <span class="chip">17 Fields</span></div>
+  <div style="padding: 14px 20px; background: var(--white); border: 1px solid var(--border); border-bottom: 0; font-size: 12px; color: var(--mid);">
+    All fields are type <strong style="color:var(--dark)">Text / Multi-line text</strong>. Create in Syncro under Settings &rarr; Asset Custom Fields before deploying.
+  </div>
+  <div class="field-grid">
+    <div class="field-card"><div class="field-name">Admin Setup Notes</div><div class="field-used">SMB-INIT-001</div></div>
+    <div class="field-card"><div class="field-name">Power Plan Notes</div><div class="field-used">SMB-INIT-002</div></div>
+    <div class="field-card"><div class="field-name">Security Policy Notes</div><div class="field-used">SMB-INIT-003</div></div>
+    <div class="field-card"><div class="field-name">Security Hardening Notes</div><div class="field-used">SMB-INIT-004</div></div>
+    <div class="field-card"><div class="field-name">Lock Policy Notes</div><div class="field-used">SMB-INIT-005</div></div>
+    <div class="field-card"><div class="field-name">RDP Security Notes</div><div class="field-used">SMB-INIT-006</div></div>
+    <div class="field-card"><div class="field-name">Service Hardening Notes</div><div class="field-used">SMB-INIT-007</div></div>
+    <div class="field-card"><div class="field-name">PS Security Notes</div><div class="field-used">SMB-INIT-008</div></div>
+    <div class="field-card"><div class="field-name">Debloat Notes</div><div class="field-used">SMB-INIT-009</div></div>
+    <div class="field-card"><div class="field-name">GravityZone Status</div><div class="field-used">Standalone, SMB-WEEK-003</div></div>
+    <div class="field-card"><div class="field-name">GravityZone Notes</div><div class="field-used">Standalone, SMB-WEEK-003</div></div>
+    <div class="field-card"><div class="field-name">Admin Audit Status</div><div class="field-used">SMB-WEEK-001</div></div>
+    <div class="field-card"><div class="field-name">Admin Audit Notes</div><div class="field-used">SMB-WEEK-001</div></div>
+    <div class="field-card"><div class="field-name">Patch Compliance</div><div class="field-used">SMB-WEEK-002</div></div>
+    <div class="field-card"><div class="field-name">Patch Notes</div><div class="field-used">SMB-WEEK-002</div></div>
+    <div class="field-card"><div class="field-name">Security Event Status</div><div class="field-used">SMB-WEEK-004</div></div>
+    <div class="field-card"><div class="field-name">Security Event Notes</div><div class="field-used">SMB-WEEK-004</div></div>
+    <div class="field-card"><div class="field-name">System Health Status</div><div class="field-used">SMB-WEEK-005</div></div>
+    <div class="field-card"><div class="field-name">System Health Notes</div><div class="field-used">SMB-WEEK-005</div></div>
+    <div class="field-card"><div class="field-name">GZ Remediation Notes</div><div class="field-used">SMB-REM-001</div></div>
+    <div class="field-card"><div class="field-name">Syncro Remediation Notes</div><div class="field-used">SMB-REM-002</div></div>
+    <div class="field-card"><div class="field-name">Cleanup Notes</div><div class="field-used">SMB-REM-003</div></div>
+  </div>
+
+  <!-- NOTES & LIMITATIONS -->
+  <div class="section-label">Notes &amp; Limitations</div>
+  <div class="gap-grid">
+    <div class="gap-card amber">
+      <div class="gap-title">GravityZone Firewall Excluded</div>
+      <div class="gap-desc">The GravityZone Firewall module is intentionally absent from all scripts. A prior deployment without pre-built RMM port rules caused a complete connectivity outage requiring on-site remediation. Windows Defender Firewall remains active as the workstation-level baseline.</div>
+      <div class="gap-rec">&rarr; Requires a dedicated staged rollout plan before enabling in any environment.</div>
+    </div>
+    <div class="gap-card blue">
+      <div class="gap-title">GravityZone Deployment Sequencing</div>
+      <div class="gap-desc">The GravityZone Standalone verification script is intentionally excluded from the INIT sequence. GravityZone is deployed via the Syncro RMM agent and may not be installed by the time INIT scripts complete. Running verification against an absent agent generates false negative tickets.</div>
+      <div class="gap-rec">&rarr; Run the Standalone script manually after confirming GravityZone is installed and the Syncro agent has checked in.</div>
+    </div>
+    <div class="gap-card amber">
+      <div class="gap-title">Print Spooler Left Enabled</div>
+      <div class="gap-desc">SMB-INIT-007 leaves the Print Spooler service enabled by default. PrintNightmare (CVE-2021-34527) is a real attack surface but disabling Spooler breaks all local and network printing — not acceptable as a default for most SMB clients.</div>
+      <div class="gap-rec">&rarr; Disable manually on endpoints confirmed to have no printing requirements. Document the exception in the asset record.</div>
+    </div>
+    <div class="gap-card blue">
+      <div class="gap-title">Nightly Power-Off Pattern</div>
+      <div class="gap-desc">SMB clients who power off workstations nightly will have inconsistent weekly script coverage. Machines that are off at 2AM Monday will miss that week's compliance checks. SMB-WEEK-005 surfaces this via the uptime floor check and flags it in the ticket.</div>
+      <div class="gap-rec">&rarr; Discuss leaving managed workstations powered on overnight with affected clients. Document client preference if they decline.</div>
+    </div>
+    <div class="gap-card">
+      <div class="gap-title">BitLocker Not Enforced</div>
+      <div class="gap-desc">Full disk encryption via BitLocker is not enforced at the SMB Standard tier. BitLocker enforcement and weekly key escrow verification is reserved for regulated environments (Healthcare, Legal, Finance). SMB clients may optionally have BitLocker enabled on a per-device basis.</div>
+      <div class="gap-rec">&rarr; If a client requests BitLocker, enable manually and apply the HC-INIT-003 and HC-WEEK-001 scripts selectively.</div>
+    </div>
+    <div class="gap-card green">
+      <div class="gap-title">Safe to Re-Run on Existing Workstations</div>
+      <div class="gap-desc">All 9 INIT scripts are idempotent. They check before acting — accounts are skipped if they already exist, registry keys are simply overwritten, and services check state before attempting changes. Running the full INIT suite on an already-provisioned workstation will verify and enforce all settings without causing harm.</div>
+      <div class="gap-rec">&rarr; Recommended: Run the full INIT suite on existing client workstations being brought under the SMB Standard policy for the first time.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    <div>Syncro RMM SMB Standard Hardening Script Suite — Configuration Reference</div>
+    <div>Prepared by <strong>Advatek Technology Solution</strong> &mdash; April 2026</div>
+    <div style="margin-top: 8px;">Syncro RMM &bull; PowerShell Automation &bull; Windows 11 Workstations &bull; CIS Controls v8 Aligned</div>
+    <div style="margin-top: 8px; font-size: 10px;">This document is intended for internal MSP use and client-facing security documentation. It does not constitute legal compliance certification. For regulated environments, refer to the applicable vertical hardening suite.</div>
+  </div>
+
+</div><!-- /page -->
+
+</body>
+</html>

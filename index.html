@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advatek — Client Portal</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+:root {
+  --black:  #0a0a0a;
+  --dark:   #111827;
+  --slate:  #1f2937;
+  --mid:    #6b7280;
+  --light:  #9ca3af;
+  --border: #e5e7eb;
+  --bg:     #f9fafb;
+  --white:  #ffffff;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── NAV ─────────────────────────────────────────────── */
+nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.nav-logo { flex-shrink: 0; text-decoration: none; }
+.nav-logo img { height: 26px; width: auto; display: block; }
+
+.nav-tabs { display: flex; height: 100%; }
+.nav-tab {
+  background: none; border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--mid);
+  font-size: 11px; font-weight: 600; letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0 18px;
+  cursor: pointer; height: 100%;
+  display: flex; align-items: center;
+  transition: color 0.15s, border-color 0.15s;
+  position: relative; top: 1px;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: var(--dark); }
+.nav-tab.active { color: var(--dark); border-bottom-color: var(--dark); }
+
+.nav-spacer { flex: 1; }
+.nav-contact { font-size: 11px; color: var(--light); white-space: nowrap; }
+.nav-contact a { color: var(--light); text-decoration: none; }
+.nav-contact a:hover { color: var(--dark); }
+
+/* ── HERO ─────────────────────────────────────────────── */
+.hero {
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.9) 0%, rgba(15,24,42,0.8) 100%);
+}
+.hero-bg::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.hero-inner {
+  position: relative; z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 68px 32px 60px;
+}
+.hero-eyebrow {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: rgba(255,255,255,0.3);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-size: 44px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--white);
+  line-height: 1.1; margin-bottom: 14px;
+}
+.hero-sub {
+  font-size: 13px; color: rgba(255,255,255,0.35);
+  letter-spacing: 0.3px; line-height: 1.6; max-width: 460px;
+}
+
+/* ── MAIN ─────────────────────────────────────────────── */
+main { flex: 1; max-width: 1200px; margin: 0 auto; width: 100%; padding: 48px 32px; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ── SECTION LABEL ────────────────────────────────────── */
+.section-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--mid);
+  margin-bottom: 24px;
+  display: flex; align-items: center; gap: 14px;
+}
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* ── REPORTS ──────────────────────────────────────────── */
+.year-block { margin-bottom: 48px; }
+
+.reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+.report-card {
+  background: var(--white);
+  padding: 28px;
+  display: flex; flex-direction: column; gap: 18px;
+  position: relative;
+  transition: background 0.15s;
+}
+.report-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; width: 3px; height: 100%;
+  background: var(--dark);
+}
+.report-card.available:hover { background: var(--bg); cursor: pointer; }
+.report-card.pending { opacity: 0.5; }
+.report-card.pending::before { background: var(--border); }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.card-month { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; color: var(--dark); }
+.card-period { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--light); margin-top: 4px; }
+
+.badge {
+  font-size: 9px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 4px 10px; border: 1px solid;
+  white-space: nowrap;
+}
+.badge-live   { border-color: var(--dark); color: var(--dark); }
+.badge-soon   { border-color: #d1d5db; color: var(--light); }
+.badge-legacy { border-color: #d1d5db; color: var(--light); }
+
+.card-stats { display: flex; flex-direction: column; gap: 5px; }
+.stat-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--mid); }
+.stat-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--light); flex-shrink: 0; }
+
+.card-footer { margin-top: auto; }
+.btn-primary {
+  display: inline-flex; align-items: center;
+  background: var(--dark); color: var(--white);
+  text-decoration: none;
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 11px 20px;
+  border: none; cursor: pointer; transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--black); }
+.btn-disabled {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--border); color: var(--light);
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 11px 20px; cursor: default;
+}
+
+/* ── SOP ──────────────────────────────────────────────── */
+.sop-meta-bar {
+  background: var(--dark); color: var(--white);
+  padding: 16px 24px;
+  display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  margin-bottom: 28px;
+}
+.sop-meta-bar .meta { font-size: 11px; color: rgba(255,255,255,0.4); }
+.sop-meta-bar .meta strong { color: var(--white); font-weight: 600; }
+.sop-meta-bar .divr { width: 1px; height: 14px; background: rgba(255,255,255,0.12); }
+
+.sop-wrapper { display: grid; grid-template-columns: 210px 1fr; gap: 24px; align-items: start; }
+
+.sop-toc { position: sticky; top: 80px; border: 1px solid var(--border); background: var(--white); }
+.toc-header {
+  background: var(--dark); color: var(--white);
+  font-size: 9px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; padding: 11px 14px;
+}
+.sop-toc a {
+  display: block; font-size: 11px; color: var(--mid);
+  text-decoration: none; padding: 8px 14px;
+  border-left: 2px solid transparent; border-bottom: 1px solid var(--border);
+  transition: all 0.15s; line-height: 1.4;
+}
+.sop-toc a:last-child { border-bottom: none; }
+.sop-toc a:hover { color: var(--dark); border-left-color: var(--dark); background: var(--bg); }
+.sop-toc a.sub { padding-left: 26px; font-size: 10.5px; color: var(--light); }
+
+.sop-content { background: var(--white); border: 1px solid var(--border); padding: 36px 40px; }
+.sop-section { margin-bottom: 40px; scroll-margin-top: 88px; }
+.sop-section:last-child { margin-bottom: 0; }
+
+.sop-h1 {
+  font-size: 12px; font-weight: 700; letter-spacing: 2.5px;
+  text-transform: uppercase; color: var(--dark);
+  margin-bottom: 16px; padding-bottom: 12px;
+  border-bottom: 2px solid var(--dark);
+  display: flex; align-items: center; gap: 12px;
+}
+.sop-num {
+  background: var(--dark); color: var(--white);
+  font-size: 10px; font-weight: 700; letter-spacing: 1px;
+  padding: 3px 9px; flex-shrink: 0;
+}
+.sop-h2 {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--slate); margin: 18px 0 10px;
+}
+.sop-p { font-size: 13px; color: var(--mid); line-height: 1.8; margin-bottom: 10px; }
+
+.sop-list { list-style: none; margin: 10px 0 12px; display: flex; flex-direction: column; gap: 7px; }
+.sop-list li { font-size: 13px; color: var(--mid); line-height: 1.65; padding-left: 18px; position: relative; }
+.sop-list li::before { content: '—'; position: absolute; left: 0; color: var(--light); font-size: 10px; }
+.sop-list li strong { color: var(--slate); }
+
+.severity-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 12px 0;
+}
+.sev-card { background: var(--white); padding: 14px 16px; border-left: 3px solid; }
+.sev-critical { border-color: #dc2626; } .sev-high { border-color: #ea580c; }
+.sev-medium   { border-color: #ca8a04; } .sev-low  { border-color: #16a34a; }
+.sev-label { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+.sev-critical .sev-label { color: #dc2626; } .sev-high .sev-label { color: #ea580c; }
+.sev-medium .sev-label   { color: #ca8a04; } .sev-low .sev-label  { color: #16a34a; }
+.sev-card p { font-size: 12px; color: var(--mid); line-height: 1.5; }
+
+.personnel-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 12px 0;
+}
+.person-card { background: var(--white); padding: 18px; }
+.person-name { font-size: 13px; font-weight: 700; color: var(--dark); margin-bottom: 3px; }
+.person-role { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--mid); margin-bottom: 8px; }
+.person-duties { font-size: 12px; color: var(--light); line-height: 1.55; }
+
+.workflow-steps { display: flex; flex-direction: column; gap: 10px; margin: 12px 0; }
+.workflow-step { display: flex; gap: 12px; align-items: flex-start; }
+.step-num {
+  background: var(--dark); color: var(--white);
+  font-size: 10px; font-weight: 700;
+  min-width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-body { font-size: 13px; color: var(--mid); line-height: 1.65; padding-top: 2px; }
+.step-body strong { color: var(--slate); }
+
+.ref-cols {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 1px; background: var(--border); border: 1px solid var(--border); margin: 12px 0;
+}
+.ref-group { background: var(--white); padding: 18px; }
+.ref-group-title { font-size: 9px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--dark); margin-bottom: 10px; }
+
+/* ── FOOTER ───────────────────────────────────────────── */
+footer { background: var(--dark); padding: 28px 32px; margin-top: auto; }
+.footer-inner {
+  max-width: 1200px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.footer-logo img { height: 22px; width: auto; filter: invert(1); opacity: 0.45; }
+.footer-right { font-size: 11px; color: rgba(255,255,255,0.22); text-align: right; line-height: 1.8; }
+.footer-right a { color: rgba(255,255,255,0.28); text-decoration: none; }
+.footer-right a:hover { color: rgba(255,255,255,0.55); }
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+@media (max-width: 960px) {
+  .sop-wrapper { grid-template-columns: 1fr; }
+  .sop-toc { position: static; }
+  .personnel-grid { grid-template-columns: 1fr; }
+  .ref-cols { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .nav-inner { padding: 0 16px; gap: 0; }
+  .nav-contact { display: none; }
+  .nav-tab { padding: 0 12px; font-size: 10px; letter-spacing: 1px; }
+  .hero h1 { font-size: 28px; letter-spacing: 2px; }
+  .hero-inner { padding: 44px 16px 36px; }
+  main { padding: 32px 16px; }
+  .sop-content { padding: 20px 16px; }
+  .severity-grid { grid-template-columns: 1fr; }
+  .reports-grid { grid-template-columns: 1fr; }
+  .sop-meta-bar { gap: 10px; }
+  .sop-meta-bar .divr { display: none; }
+  footer { padding: 24px 16px; }
+  .footer-right { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="index.html">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </a>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-btn-reports" onclick="switchTab('reports', this)">Reports</button>
+      <button class="nav-tab" id="tab-btn-sop" onclick="switchTab('sop', this)">SOP &amp; Policy</button>
+      <button class="nav-tab" id="tab-btn-hardening" onclick="switchTab('hardening', this)">Hardening</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="nav-contact">
+      <a href="tel:9014504500">(901) 450-4500</a>&nbsp;&middot;&nbsp;<a href="https://advatek.com">advatek.com</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="portal-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Client Portal</div>
+    <h1 id="hero-title">Monthly<br>Reports</h1>
+    <p class="hero-sub" id="hero-sub">Managed IT activity, license summaries, and service records — prepared by Advatek.</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main>
+
+  <!-- REPORTS TAB -->
+  <section id="tab-reports" class="tab-content active">
+
+    <div class="year-block">
+      <div class="section-label">2026</div>
+      <div class="reports-grid">
+
+        <div class="report-card available">
+          <div class="card-top">
+            <div>
+              <div class="card-month">March 2026</div>
+              <div class="card-period">Billing Period</div>
+            </div>
+            <span class="badge badge-live">Live</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>5 service tickets &middot; 3.07 hrs billed</div>
+            <div class="stat-row"><div class="stat-dot"></div>511 recurring license seats</div>
+            <div class="stat-row"><div class="stat-dot"></div>28 active clients</div>
+            <div class="stat-row"><div class="stat-dot"></div>340 IronScales seats across 12 clients</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="March_2026_Report.html">View Report &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+        <div class="report-card pending">
+          <div class="card-top">
+            <div>
+              <div class="card-month">April 2026</div>
+              <div class="card-period">Billing Period</div>
+            </div>
+            <span class="badge badge-soon">In Prep</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>Currently being prepared</div>
+          </div>
+          <div class="card-footer">
+            <span class="btn-disabled">Not Yet Published</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="year-block">
+      <div class="section-label">Archive &mdash; 2023</div>
+      <div class="reports-grid">
+        <div class="report-card pending">
+          <div class="card-top"><div><div class="card-month">December 2023</div><div class="card-period">Billing Period</div></div><span class="badge badge-legacy">Legacy</span></div>
+          <div class="card-stats"><div class="stat-row"><div class="stat-dot"></div>Available as spreadsheet on request</div></div>
+          <div class="card-footer"><span class="btn-disabled">Spreadsheet Only</span></div>
+        </div>
+        <div class="report-card pending">
+          <div class="card-top"><div><div class="card-month">November 2023</div><div class="card-period">Billing Period</div></div><span class="badge badge-legacy">Legacy</span></div>
+          <div class="card-stats"><div class="stat-row"><div class="stat-dot"></div>Available as spreadsheet on request</div></div>
+          <div class="card-footer"><span class="btn-disabled">Spreadsheet Only</span></div>
+        </div>
+        <div class="report-card pending">
+          <div class="card-top"><div><div class="card-month">October 2023</div><div class="card-period">Billing Period</div></div><span class="badge badge-legacy">Legacy</span></div>
+          <div class="card-stats"><div class="stat-row"><div class="stat-dot"></div>Available as spreadsheet on request</div></div>
+          <div class="card-footer"><span class="btn-disabled">Spreadsheet Only</span></div>
+        </div>
+        <div class="report-card pending">
+          <div class="card-top"><div><div class="card-month">September 2023</div><div class="card-period">Billing Period</div></div><span class="badge badge-legacy">Legacy</span></div>
+          <div class="card-stats"><div class="stat-row"><div class="stat-dot"></div>Available as spreadsheet on request</div></div>
+          <div class="card-footer"><span class="btn-disabled">Spreadsheet Only</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- HARDENING TAB -->
+  <section id="tab-hardening" class="tab-content">
+
+    <div class="year-block">
+      <div class="section-label">SMB Standard Hardening — April 2026</div>
+      <div class="reports-grid">
+
+        <div class="report-card available">
+          <div class="card-top">
+            <div>
+              <div class="card-month">SMB Standard</div>
+              <div class="card-period">Workstation Hardening</div>
+            </div>
+            <span class="badge badge-live">Live</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>9 INIT &middot; 5 Weekly &middot; 3 Remediation scripts</div>
+            <div class="stat-row"><div class="stat-dot"></div>CIS Controls v8 aligned baseline</div>
+            <div class="stat-row"><div class="stat-dot"></div>Non-HIPAA &middot; Non-regulated environments</div>
+            <div class="stat-row"><div class="stat-dot"></div>April 2026</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="SMB_Standard_Hardening_April_2026.html">View Document &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+        <div class="report-card available">
+          <div class="card-top">
+            <div>
+              <div class="card-month">GravityZone</div>
+              <div class="card-period">SMB Standard Policy</div>
+            </div>
+            <span class="badge badge-live">Live</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>Bitdefender GravityZone console configuration</div>
+            <div class="stat-row"><div class="stat-dot"></div>40+ fields &middot; 8 policy sections &middot; field-level reference</div>
+            <div class="stat-row"><div class="stat-dot"></div>CIS Controls v8 aligned &middot; April 2026</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="GravityZone_SMB_Standard_Console_Config_April_2026.html">View Document &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+        <div class="report-card available" style="border-left: 3px solid #2563eb;">
+          <div class="card-top">
+            <div>
+              <div class="card-month">Endpoint Security</div>
+              <div class="card-period">Client Overview — GravityZone</div>
+            </div>
+            <span class="badge" style="border-color:#2563eb;color:#2563eb;">Client</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>Plain-language endpoint protection overview</div>
+            <div class="stat-row"><div class="stat-dot"></div>6 protection layers &middot; detection &amp; response explained</div>
+            <div class="stat-row"><div class="stat-dot"></div>Printable to PDF &mdash; client-ready &mdash; April 2026</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="SMB_GravityZone_Client_April_2026.html">View &amp; Print &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+        <div class="report-card available" style="border-left: 3px solid #2563eb;">
+          <div class="card-top">
+            <div>
+              <div class="card-month">SMB IT</div>
+              <div class="card-period">Capabilities Overview</div>
+            </div>
+            <span class="badge" style="border-color:#2563eb;color:#2563eb;">Client</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>Security capabilities &amp; monitoring overview</div>
+            <div class="stat-row"><div class="stat-dot"></div>Industries served &amp; M365 management</div>
+            <div class="stat-row"><div class="stat-dot"></div>Printable to PDF &mdash; client-ready</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="SMB_IT_Capabilities.html">View &amp; Print &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="year-block">
+      <div class="section-label">Healthcare Hardening — April 2026</div>
+      <div class="reports-grid">
+
+        <div class="report-card available">
+          <div class="card-top">
+            <div>
+              <div class="card-month">GravityZone</div>
+              <div class="card-period">Healthcare Hardening</div>
+            </div>
+            <span class="badge badge-live">Live</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>Bitdefender GravityZone endpoint hardening</div>
+            <div class="stat-row"><div class="stat-dot"></div>HIPAA-aligned environment configuration</div>
+            <div class="stat-row"><div class="stat-dot"></div>April 2026</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="GravityZone_Healthcare_Hardening_April_2026.html">View Document &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+        <div class="report-card available">
+          <div class="card-top">
+            <div>
+              <div class="card-month">Syncro RMM</div>
+              <div class="card-period">Healthcare Hardening</div>
+            </div>
+            <span class="badge badge-live">Live</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>Syncro RMM automation suite</div>
+            <div class="stat-row"><div class="stat-dot"></div>HIPAA-aligned environment standards</div>
+            <div class="stat-row"><div class="stat-dot"></div>April 2026</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="Syncro_Healthcare_Hardening_April_2026.html">View Document &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+        <div class="report-card available" style="border-left: 3px solid #2563eb;">
+          <div class="card-top">
+            <div>
+              <div class="card-month">Healthcare IT</div>
+              <div class="card-period">Capabilities Overview</div>
+            </div>
+            <span class="badge" style="border-color:#2563eb;color:#2563eb;">Client</span>
+          </div>
+          <div class="card-stats">
+            <div class="stat-row"><div class="stat-dot"></div>HIPAA hardening capabilities &amp; proof</div>
+            <div class="stat-row"><div class="stat-dot"></div>EMR &amp; HCHB service overview</div>
+            <div class="stat-row"><div class="stat-dot"></div>Printable to PDF &mdash; client-ready</div>
+          </div>
+          <div class="card-footer">
+            <a class="btn-primary" href="Healthcare_IT_Capabilities.html">View &amp; Print &nbsp;&rarr;</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </section>
+
+  <!-- SOP TAB -->
+  <section id="tab-sop" class="tab-content">
+
+    <div class="sop-meta-bar">
+      <div class="meta"><strong>Document</strong>&nbsp;Information Security &amp; Business Continuity Policies</div>
+      <div class="divr"></div>
+      <div class="meta"><strong>Version</strong>&nbsp;4.2</div>
+      <div class="divr"></div>
+      <div class="meta"><strong>Updated</strong>&nbsp;April 26, 2026</div>
+      <div class="divr"></div>
+      <div class="meta"><strong>Owner</strong>&nbsp;Kit Ri&ntilde;os &middot; <strong>Approved</strong>&nbsp;Raffie Freiden</div>
+    </div>
+
+    <div class="sop-wrapper">
+      <aside class="sop-toc">
+        <div class="toc-header">Contents</div>
+        <a href="#sop-1">1. Purpose</a>
+        <a href="#sop-2">2. Scope</a>
+        <a href="#sop-3">3. Risk Assessment</a>
+        <a href="#sop-4">4. Business Continuity</a>
+        <a href="#sop-4" class="sub">4.1 Key Personnel</a>
+        <a href="#sop-4" class="sub">4.2 Infrastructure</a>
+        <a href="#sop-4" class="sub">4.3 Disaster Recovery</a>
+        <a href="#sop-5">5. Cybersecurity Compliance</a>
+        <a href="#sop-6">6. Maintenance &amp; Review</a>
+        <a href="#sop-7">7. Anti-Malware &amp; Hardening</a>
+        <a href="#sop-8">8. Vulnerability Management</a>
+        <a href="#sop-9">9. Incident Response</a>
+        <a href="#sop-10">10. Cloud Storage Policy</a>
+        <a href="#sop-app">Appendices</a>
+      </aside>
+
+      <div class="sop-content">
+
+        <div class="sop-section" id="sop-1">
+          <div class="sop-h1"><span class="sop-num">01</span>Purpose</div>
+          <p class="sop-p">This document outlines the standard operating procedures for Advatek Technology Solutions' information security risk assessment, business continuity planning, cybersecurity compliance, and related operational policies. It is the authoritative reference for all personnel managing or supporting Advatek's infrastructure and client environments.</p>
+        </div>
+
+        <div class="sop-section" id="sop-2">
+          <div class="sop-h1"><span class="sop-num">02</span>Scope</div>
+          <p class="sop-p">This SOP applies to all personnel, systems, services, and data managed by Advatek Technology Solutions — including security operations, client-facing infrastructure, remote and on-site support, and all managed endpoints regardless of location.</p>
+        </div>
+
+        <div class="sop-section" id="sop-3">
+          <div class="sop-h1"><span class="sop-num">03</span>Information Security Risk Assessment</div>
+          <p class="sop-p">Objective: To identify, assess, and manage information security risks consistently across the organization.</p>
+          <div class="workflow-steps">
+            <div class="workflow-step"><div class="step-num">1</div><div class="step-body"><strong>Define Scope</strong> &mdash; Identify the systems, services, or business functions to be assessed.</div></div>
+            <div class="workflow-step"><div class="step-num">2</div><div class="step-body"><strong>Asset Inventory &amp; Classification</strong> &mdash; Catalog assets and assign CIA ratings.</div></div>
+            <div class="workflow-step"><div class="step-num">3</div><div class="step-body"><strong>Threat &amp; Vulnerability Identification</strong> &mdash; Document threats and weaknesses from logs, scans, and intelligence.</div></div>
+            <div class="workflow-step"><div class="step-num">4</div><div class="step-body"><strong>Risk Scoring</strong> &mdash; Assign Likelihood and Impact ratings; determine Inherent Risk via matrix.</div></div>
+            <div class="workflow-step"><div class="step-num">5</div><div class="step-body"><strong>Risk Treatment</strong> &mdash; Accept, Mitigate, Transfer, or Avoid each identified risk.</div></div>
+            <div class="workflow-step"><div class="step-num">6</div><div class="step-body"><strong>Residual Risk Evaluation</strong> &mdash; Assess remaining risk after controls are applied.</div></div>
+            <div class="workflow-step"><div class="step-num">7</div><div class="step-body"><strong>Documentation</strong> &mdash; Maintain a central Risk Register with audit-ready records.</div></div>
+            <div class="workflow-step"><div class="step-num">8</div><div class="step-body"><strong>Review Cycle</strong> &mdash; Reassess annually or following significant changes.</div></div>
+          </div>
+          <p class="sop-p"><strong style="color:var(--slate)">Risk Assessment Owner:</strong> Kit Ri&ntilde;os &nbsp;&middot;&nbsp; <strong style="color:var(--slate)">Oversight:</strong> Raffie Freiden</p>
+        </div>
+
+        <div class="sop-section" id="sop-4">
+          <div class="sop-h1"><span class="sop-num">04</span>Business Continuity &amp; Disaster Recovery</div>
+          <div class="sop-h2">4.1 Key Personnel Plan</div>
+          <div class="personnel-grid">
+            <div class="person-card"><div class="person-name">Raffie Freiden</div><div class="person-role">Executive / Primary</div><div class="person-duties">If unavailable: Kit assumes full executive operational control. Financial management transfers to designated authority.</div></div>
+            <div class="person-card"><div class="person-name">Kit Ri&ntilde;os</div><div class="person-role">Operations Manager</div><div class="person-duties">If unavailable: Joyce Santillan manages all technical and operational responsibilities.</div></div>
+            <div class="person-card"><div class="person-name">Joyce Santillan</div><div class="person-role">Technical Backup</div><div class="person-duties">Assumes operational responsibilities as needed during staffing continuity events.</div></div>
+          </div>
+          <div class="sop-h2">4.2 Continuity Infrastructure</div>
+          <ul class="sop-list">
+            <li><strong>Microsoft O365</strong> &mdash; Email, documents, and collaboration remain accessible during disruptions.</li>
+            <li><strong>Syncro RMM</strong> &mdash; Remote device management, alerting, and automated patching.</li>
+            <li><strong>Bitdefender GravityZone</strong> &mdash; Endpoint protection, malware prevention, and device health monitoring.</li>
+            <li><strong>IBM MaaS360</strong> &mdash; MDM for Android tablets; policy enforcement and remote wipe.</li>
+          </ul>
+          <div class="sop-h2">4.3 Disaster Recovery</div>
+          <ul class="sop-list">
+            <li><strong>Backups:</strong> O365 integrated solutions and offsite cloud providers.</li>
+            <li><strong>Restoration:</strong> Critical systems restored within defined RTOs.</li>
+            <li><strong>Documentation:</strong> SOPs, credentials, and escalation plans secured in O365.</li>
+          </ul>
+          <div class="sop-h2">4.4 Testing</div>
+          <ul class="sop-list">
+            <li>Disaster recovery processes tested at least annually.</li>
+            <li>Tabletop simulations conducted as needed with executive and technical leads.</li>
+          </ul>
+        </div>
+
+        <div class="sop-section" id="sop-5">
+          <div class="sop-h1"><span class="sop-num">05</span>Cybersecurity Compliance</div>
+          <ul class="sop-list">
+            <li><strong>Endpoint Security</strong> &mdash; Bitdefender GravityZone on all workstations and servers.</li>
+            <li><strong>Mobile Device Management</strong> &mdash; IBM MaaS360 enforces encryption, password policies, and location tracking.</li>
+            <li><strong>Access Control &amp; MFA</strong> &mdash; Microsoft O365 with MFA enforced on all accounts and admin roles.</li>
+            <li><strong>Patch Management</strong> &mdash; Automated updates deployed via Syncro RMM.</li>
+            <li><strong>User Behavior Monitoring</strong> &mdash; Acceptable Use Policies in place; logs retained for audit compliance.</li>
+            <li><strong>Contractual Oversight</strong> &mdash; Healthcare and enterprise client security obligations reviewed quarterly.</li>
+          </ul>
+        </div>
+
+        <div class="sop-section" id="sop-6">
+          <div class="sop-h1"><span class="sop-num">06</span>Maintenance &amp; Review</div>
+          <ul class="sop-list">
+            <li><strong>Maintained by:</strong> Kit Ri&ntilde;os</li>
+            <li><strong>Approved by:</strong> Raffie Freiden</li>
+            <li><strong>Next Review Date:</strong> October 26, 2026</li>
+          </ul>
+        </div>
+
+        <div class="sop-section" id="sop-7">
+          <div class="sop-h1"><span class="sop-num">07</span>Anti-Malware &amp; System Hardening</div>
+          <div class="sop-h2">7.1 Anti-Malware Controls</div>
+          <ul class="sop-list">
+            <li><strong>Real-Time Monitoring</strong> &mdash; Continuously enabled for all endpoints.</li>
+            <li><strong>Scheduled Scan Tasks</strong> &mdash; Automated threat detection calibrated by client environment. Standard environments run a daily quick scan and weekly full scan. Regulated environments (healthcare) run a nightly full scan. All missed scans execute automatically when the endpoint comes back online.</li>
+            <li><strong>Signature Updates</strong> &mdash; Virus definitions updated every hour from Bitdefender's servers, ensuring current threat coverage across all managed endpoints.</li>
+            <li><strong>Policy Enforcement</strong> &mdash; Managed via GravityZone central dashboard by device role and client environment.</li>
+          </ul>
+          <div class="sop-h2">7.2 System Configuration &amp; Hardening</div>
+          <ul class="sop-list">
+            <li><strong>Baseline Standards</strong> &mdash; All managed workstations follow documented security hardening baselines aligned with CIS Controls v8 and Microsoft Security Baseline recommendations.</li>
+            <li><strong>Deployment</strong> &mdash; Hardened configurations are deployed and enforced via Advatek's remote management platform at provisioning and maintained on an ongoing basis. Configurations are applied consistently across all managed endpoints regardless of client environment.</li>
+            <li><strong>Controls Enforced</strong> &mdash; Baseline hardening covers access control policies, protocol security, credential protection, inactivity lock enforcement, remote access security, attack surface reduction, and audit logging. Specific controls are calibrated to the security requirements of each client environment.</li>
+            <li><strong>Ongoing Compliance Monitoring</strong> &mdash; Automated weekly checks verify that security configurations remain in place across all managed endpoints. Any deviation from the established baseline generates an alert for immediate review and remediation.</li>
+            <li><strong>Network Devices</strong> &mdash; Configured using vendor security templates with secure protocols enforced and administrative access logging enabled.</li>
+            <li><strong>Documentation &amp; Review</strong> &mdash; All hardening standards are formally documented and reviewed on the same cycle as this SOP, or following any significant change to operating systems, platforms, or applicable best practice guidelines.</li>
+          </ul>
+        </div>
+
+        <div class="sop-section" id="sop-8">
+          <div class="sop-h1"><span class="sop-num">08</span>Vulnerability Management</div>
+          <div class="sop-h2">8.1 Severity Classification (CVSS-aligned)</div>
+          <div class="severity-grid">
+            <div class="sev-card sev-critical"><div class="sev-label">Critical</div><p>Immediate remediation required. Exploitation is likely or occurring.</p></div>
+            <div class="sev-card sev-high"><div class="sev-label">High</div><p>Remediate within SLA. Significant exposure risk to client systems.</p></div>
+            <div class="sev-card sev-medium"><div class="sev-label">Medium</div><p>Scheduled remediation. Contextual risk reviewed before prioritization.</p></div>
+            <div class="sev-card sev-low"><div class="sev-label">Low</div><p>Address in routine maintenance cycle. Minimal exploitation risk.</p></div>
+          </div>
+          <div class="sop-h2">8.3 Response Workflow</div>
+          <div class="workflow-steps">
+            <div class="workflow-step"><div class="step-num">1</div><div class="step-body"><strong>Log &amp; Track</strong> &mdash; Issue entered into vulnerability tracking system.</div></div>
+            <div class="workflow-step"><div class="step-num">2</div><div class="step-body"><strong>Assign Ownership</strong> &mdash; Responsible engineer or team assigned.</div></div>
+            <div class="workflow-step"><div class="step-num">3</div><div class="step-body"><strong>Mitigation or Remediation</strong> &mdash; Controls applied per severity SLA.</div></div>
+            <div class="workflow-step"><div class="step-num">4</div><div class="step-body"><strong>Validation</strong> &mdash; Fix validated via retest or third-party confirmation.</div></div>
+            <div class="workflow-step"><div class="step-num">5</div><div class="step-body"><strong>Closure</strong> &mdash; Final status recorded in Risk Register.</div></div>
+          </div>
+        </div>
+
+        <div class="sop-section" id="sop-9">
+          <div class="sop-h1"><span class="sop-num">09</span>Incident Response Plan</div>
+          <div class="sop-h2">9.1 Incident Classification</div>
+          <div class="severity-grid">
+            <div class="sev-card sev-low"><div class="sev-label">Low</div><p>Minor policy violations or isolated user issues.</p></div>
+            <div class="sev-card sev-medium"><div class="sev-label">Medium</div><p>Malware detected, unusual login activity, or partial system disruption.</p></div>
+            <div class="sev-card sev-high"><div class="sev-label">High</div><p>Unauthorized access, compromised credentials, or significant anomalies.</p></div>
+            <div class="sev-card sev-critical"><div class="sev-label">Critical</div><p>Confirmed breach, ransomware, system-wide outage, or regulatory violation.</p></div>
+          </div>
+          <div class="sop-h2">9.3 Response Workflow</div>
+          <div class="workflow-steps">
+            <div class="workflow-step"><div class="step-num">1</div><div class="step-body"><strong>Detection</strong> &mdash; All suspicious activity logged immediately via Bitdefender, Syncro, O365, or user report.</div></div>
+            <div class="workflow-step"><div class="step-num">2</div><div class="step-body"><strong>Classification &amp; Escalation</strong> &mdash; Notify Incident Response Lead for Medium&ndash;Critical events.</div></div>
+            <div class="workflow-step"><div class="step-num">3</div><div class="step-body"><strong>Containment</strong> &mdash; Isolate affected systems. Disable compromised accounts.</div></div>
+            <div class="workflow-step"><div class="step-num">4</div><div class="step-body"><strong>Eradication</strong> &mdash; Remove malware. Revoke credentials, apply required patches.</div></div>
+            <div class="workflow-step"><div class="step-num">5</div><div class="step-body"><strong>Recovery</strong> &mdash; Restore from known-good backups. Monitor for reinfection.</div></div>
+            <div class="workflow-step"><div class="step-num">6</div><div class="step-body"><strong>Notification</strong> &mdash; Clients notified within 24 hours of confirmed breach.</div></div>
+            <div class="workflow-step"><div class="step-num">7</div><div class="step-body"><strong>Post-Incident Review</strong> &mdash; Within 5 business days. Update SOPs. Log in Risk Register.</div></div>
+          </div>
+          <ul class="sop-list" style="margin-top:12px">
+            <li>Internal alerts via Teams/email. Client communication managed by Operations Manager.</li>
+            <li>No public disclosures without Executive Oversight approval.</li>
+            <li>All incidents logged in Risk Register; records retained minimum 3 years.</li>
+          </ul>
+        </div>
+
+        <div class="sop-section" id="sop-10">
+          <div class="sop-h1"><span class="sop-num">10</span>Personal Cloud Storage &amp; Data Egress</div>
+          <p class="sop-p">Installation of personal cloud storage clients on managed endpoints is <strong style="color:var(--slate)">prohibited by default</strong>. Exceptions require written approval from the client's designated authority.</p>
+          <div class="workflow-steps">
+            <div class="workflow-step"><div class="step-num">1</div><div class="step-body">End user submits a request with business justification.</div></div>
+            <div class="workflow-step"><div class="step-num">2</div><div class="step-body">Advatek escalates to client's designated authority for written approval.</div></div>
+            <div class="workflow-step"><div class="step-num">3</div><div class="step-body">Approval documented: authority, date, scope, and application name.</div></div>
+            <div class="workflow-step"><div class="step-num">4</div><div class="step-body">Installation performed by Advatek engineering using admin credentials only.</div></div>
+            <div class="workflow-step"><div class="step-num">5</div><div class="step-body">Application and approval logged in client's asset or change log.</div></div>
+          </div>
+        </div>
+
+        <div class="sop-section" id="sop-app">
+          <div class="sop-h1"><span class="sop-num">A/B</span>Appendices &amp; References</div>
+          <div class="ref-cols">
+            <div class="ref-group">
+              <div class="ref-group-title">Security &amp; Risk</div>
+              <ul class="sop-list"><li>NIST CSF, SP 800-30, SP 800-61</li><li>ISO/IEC 27001 &amp; 27002</li></ul>
+            </div>
+            <div class="ref-group">
+              <div class="ref-group-title">Hardening &amp; Scoring</div>
+              <ul class="sop-list"><li>CIS Critical Security Controls</li><li>Microsoft Security Baselines</li><li>CVSS &mdash; FIRST.org</li></ul>
+            </div>
+            <div class="ref-group">
+              <div class="ref-group-title">Operational Tools</div>
+              <ul class="sop-list"><li>Bitdefender GravityZone</li><li>Syncro RMM &middot; IBM MaaS360</li><li>Microsoft O365</li></ul>
+            </div>
+            <div class="ref-group">
+              <div class="ref-group-title">Regulatory</div>
+              <ul class="sop-list"><li>HIPAA</li><li>GDPR</li></ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="https://advatek.com/wp-content/uploads/2023/01/advatek-horitontal-thick-black-180x42@2x.png" alt="Advatek">
+    </div>
+    <div class="footer-right">
+      Advatek Technology Solutions &middot; Managed IT. Simplified.<br>
+      6000 Poplar Ave, Memphis, TN 38119 &middot; <a href="tel:9014504500">(901) 450-4500</a> &middot; <a href="https://advatek.com">advatek.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+var heroData = {
+  reports:   { title: 'Monthly<br>Reports',    sub: 'Managed IT activity, license summaries, and service records \u2014 prepared by Advatek.' },
+  sop:       { title: 'SOP &amp;<br>Policy',    sub: 'Information Security &amp; Business Continuity Standard Operating Procedures \u2014 Version 4.3.' },
+  hardening: { title: 'Hardening<br>Documents', sub: 'GravityZone, Syncro, and SMB Standard hardening documentation \u2014 internal and client-facing \u2014 April 2026.' }
+};
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-content').forEach(function(el){ el.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(el){ el.classList.remove('active'); });
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  var h = heroData[name];
+  if (h) {
+    document.getElementById('hero-title').innerHTML = h.title;
+    document.getElementById('hero-sub').innerHTML = h.sub;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+</body>
+</html>
