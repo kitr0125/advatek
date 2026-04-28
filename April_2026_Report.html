@@ -471,7 +471,7 @@ tr, .purchase-card { scroll-margin-top: 80px; }
       <p class="hero-sub">Reporting period: April 1 – April 30, 2026</p>
       <div class="hero-chips">
         <span class="hero-chip">28 Clients</span>
-        <span class="hero-chip">2 Support Tickets</span>
+        <span class="hero-chip">3 Support Tickets</span>
         <span class="hero-chip">423 Recurring Seats</span>
         <span class="hero-chip">260 Email Protection Seats</span>
         <span class="hero-chip">4 License Purchases</span>
@@ -480,7 +480,7 @@ tr, .purchase-card { scroll-margin-top: 80px; }
     </div>
     <div class="hero-stats">
       <div class="hero-stat">
-        <span class="hs-val">0:44</span>
+        <span class="hs-val">1:16</span>
         <span class="hs-lbl">Hours Billed</span>
       </div>
       <div class="hero-stat">
@@ -504,9 +504,9 @@ tr, .purchase-card { scroll-margin-top: 80px; }
     </div>
     <div class="kpi">
       <div class="kpi-icon">🎫</div>
-      <div class="kpi-val">2</div>
+      <div class="kpi-val">3</div>
       <div class="kpi-lbl">Support Tickets</div>
-      <div class="kpi-sub">0:44 hrs across 2 clients</div>
+      <div class="kpi-sub">1:16 hrs across 2 clients</div>
     </div>
     <div class="kpi">
       <div class="kpi-icon">🪟</div>
@@ -547,6 +547,13 @@ tr, .purchase-card { scroll-margin-top: 80px; }
             <div class="alert-detail">1 ticket · 0:20 hrs (remote support)</div>
           </div>
         </div>
+        <div class="alert-item" onclick="jumpTo('row-8817')">
+          <div class="alert-icon">🎫</div>
+          <div>
+            <div class="alert-client">The Law Offices of Libby &amp; Nahmias</div>
+            <div class="alert-detail">Sage Timeslips failure · 0:32 hrs · Pending Sage credential retrieval</div>
+          </div>
+        </div>
         <div class="alert-item" onclick="jumpTo('pc-clintonendo')">
           <div class="alert-icon">🪟</div>
           <div>
@@ -566,7 +573,7 @@ tr, .purchase-card { scroll-margin-top: 80px; }
   </div>
 
   <!-- SERVICE TICKETS -->
-  <div class="section-label" id="tickets">Service Tickets <span class="chip">2 tickets · 0:44 hrs</span></div>
+  <div class="section-label" id="tickets">Service Tickets <span class="chip">3 tickets · 1:16 hrs</span></div>
   <div class="flat-card">
     <div class="tbl-wrap">
       <table class="data-table">
@@ -610,6 +617,24 @@ No other issues were raised.</div>
             <td>Apr 10, 2026</td>
             <td><span class="badge b-remote">Remote</span></td>
             <td style="text-align:right;font-weight:700">20 min</td>
+          </tr>
+          <tr id="row-8817">
+            <td class="ticket-toggle" onclick="toggleNotes('n8817')">
+              <div class="ticket-num">#8817</div>
+              <span class="expand-hint">▸ View notes</span>
+            </td>
+            <td>
+              <div class="ticket-subject">Sage Timeslips Fails to Launch — TIMESLIP.CFG Not Found</div>
+              <div id="n8817" class="ticket-notes">Confirmed standalone installation (no server). Ran full disk scan (C and D) via PowerShell — TIMESLIP.CFG not found on either drive. Identified live database intact at C:\Program Files (x86)\Timeslips\DATA01\MAIN.FDB (91 MB, last modified 4/27/2026). Backed up MAIN.FDB to C:\Users\Steve\Desktop\Timeslips_Backup_DB\ via robocopy.
+
+Attempted CFG self-heal via Timeslips prompt dialog — failed, file not found. Confirmed no Repair option available in Programs and Features (Sage Timeslips Local v30.0.0.0, installed 10/4/2025). Installer downloaded from Sage Download Center (SageTimeslipsPremium-Full.exe, 223 MB) but client is unable to confirm which Sage account was used for licensing. Client is contacting Sage support to retrieve credentials.
+
+Next step: Once client has Sage account confirmed — uninstall current installation, verify MAIN.FDB survives uninstall, reinstall using correct licensed installer, point to existing DATA01 database on first launch. Database backup on desktop is current and ready.</div>
+            </td>
+            <td>The Law Offices of Libby &amp; Nahmias</td>
+            <td>Apr 28, 2026</td>
+            <td><span class="badge b-remote">Remote</span></td>
+            <td style="text-align:right;font-weight:700">32 min</td>
           </tr>
         </tbody>
       </table>
@@ -753,7 +778,7 @@ No other issues were raised.</div>
           <tr><td style="font-weight:600">Pearl Pointe</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">12 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
           <tr><td style="font-weight:600">Battery Alliance</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">11 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
           <tr><td style="font-weight:600">Cohen Investments</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">6 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
-          <tr><td style="font-weight:600">The Law Offices of Libby &amp; Nahmias</td><td><span class="badge b-remote">1 ticket · 0:20 hrs</span></td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">1 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
+          <tr><td style="font-weight:600">The Law Offices of Libby &amp; Nahmias</td><td><span class="badge b-remote">2 tickets · 0:52 hrs</span></td><td style="color:#9ca3af">—</td><td><span class="badge b-recurring">1 Pax8</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
           <tr><td style="font-weight:600">Leco Realty</td><td><span class="badge b-remote">1 ticket · 0:24 hrs</span></td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td></tr>
           <tr><td style="font-weight:600">Fulwood Construction</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="font-weight:700">8</td><td>6 dev · 1 FW · 1 Datto · 1 Srv</td></tr>
           <tr><td style="font-weight:600">JGH Legal</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="color:#9ca3af">—</td><td style="font-weight:700">9</td><td style="color:#9ca3af">—</td></tr>
