@@ -172,7 +172,7 @@ nav {
 /* ── KPI GRID ─────────────────────────────────────────── */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--border);
   border: 1px solid var(--border);
@@ -405,7 +405,7 @@ tr, .purchase-card { scroll-margin-top: 80px; }
 
 /* ── RESPONSIVE ───────────────────────────────────────── */
 @media (max-width: 1100px) {
-  .kpi-grid { grid-template-columns: repeat(3, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .hero h1 { font-size: 34px; }
 }
 @media (max-width: 768px) {
@@ -421,7 +421,6 @@ tr, .purchase-card { scroll-margin-top: 80px; }
   .alerts-panel { padding: 20px; }
   .sec-row { grid-template-columns: 1fr 48px; grid-template-rows: auto auto; row-gap: 4px; }
   .sec-name { grid-column: 1 / -1; }
-  .lic-table th:last-child, .lic-table td:last-child { display: none; }
   .fleet-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 480px) {
@@ -479,7 +478,6 @@ tr, .purchase-card { scroll-margin-top: 80px; }
       <div class="hero-chips">
         <span class="hero-chip">29 Clients</span>
         <span class="hero-chip">0 Support Tickets</span>
-        <span class="hero-chip">298 Recurring Seats</span>
         <span class="hero-chip">193 Email Protection Seats</span>
         <span class="hero-chip">3 License Purchases</span>
       </div>
@@ -519,12 +517,6 @@ tr, .purchase-card { scroll-margin-top: 80px; }
       <div class="kpi-val">3</div>
       <div class="kpi-lbl">License Purchases</div>
       <div class="kpi-sub">Office 2021 &middot; Windows 11</div>
-    </div>
-    <div class="kpi">
-      <div class="kpi-icon">&#128260;</div>
-      <div class="kpi-val">298</div>
-      <div class="kpi-lbl">Recurring Seats</div>
-      <div class="kpi-sub">Microsoft &middot; Pax8</div>
     </div>
     <div class="kpi">
       <div class="kpi-icon">&#128737;&#65039;</div>
@@ -628,36 +620,36 @@ tr, .purchase-card { scroll-margin-top: 80px; }
   </div>
 
   <!-- RECURRING LICENSES -->
-  <div class="section-label" id="licenses">Recurring License Counts <span class="chip">298 total seats</span></div>
+  <div class="section-label" id="licenses">Recurring License Counts <span class="chip">Microsoft &middot; Pax8</span></div>
   <div class="flat-card">
 
     <div class="lic-block">
-      <div class="lic-vendor-label">Microsoft 365 Direct &mdash; 214 seats</div>
+      <div class="lic-vendor-label">Microsoft 365 Direct</div>
       <table class="lic-table">
-        <thead><tr><th>Client</th><th>Plans</th><th style="width:55px;text-align:right">Total</th><th style="width:130px">Scale</th></tr></thead>
+        <thead><tr><th style="width:32%">Client</th><th>Plans &amp; Seat Counts</th></tr></thead>
         <tbody>
-          <tr id="row-inspired-lic"><td class="lic-client">Inspired Homecare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;34</span><span class="lic-plan-chip">Basic &times;6</span><span class="lic-plan-chip">AIP P1 &times;36</span><span class="lic-plan-chip">Exch &times;4</span></div></td><td class="lic-total">80</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:100%"></div></div></div></td></tr>
-          <tr><td class="lic-client">Elon Manor</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Basic &times;36</span><span class="lic-plan-chip">AIP P1 &times;36</span></div></td><td class="lic-total">72</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:90%"></div></div></div></td></tr>
-          <tr><td class="lic-client">PDOC</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">AIP P1 &times;24</span><span class="lic-plan-chip">Exch &times;25</span></div></td><td class="lic-total">49</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:61.3%"></div></div></div></td></tr>
-          <tr id="row-sanurses-lic"><td class="lic-client">SA Nurses</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;6</span><span class="lic-plan-chip">AIP P1 &times;6</span></div></td><td class="lic-total">12</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:15%"></div></div></div></td></tr>
-          <tr id="row-transition"><td class="lic-client">Transition Healthcare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;1</span></div></td><td class="lic-total">1</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill blue" style="width:1.3%"></div></div></div></td></tr>
+          <tr id="row-inspired-lic"><td class="lic-client">Inspired Homecare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;34</span><span class="lic-plan-chip">Basic &times;6</span><span class="lic-plan-chip">AIP P1 &times;36</span><span class="lic-plan-chip">Exch &times;4</span></div></td></tr>
+          <tr><td class="lic-client">Elon Manor</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Basic &times;36</span><span class="lic-plan-chip">AIP P1 &times;36</span></div></td></tr>
+          <tr><td class="lic-client">PDOC</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">AIP P1 &times;24</span><span class="lic-plan-chip">Exch &times;25</span></div></td></tr>
+          <tr id="row-sanurses-lic"><td class="lic-client">SA Nurses</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;6</span><span class="lic-plan-chip">AIP P1 &times;6</span></div></td></tr>
+          <tr id="row-transition"><td class="lic-client">Transition Healthcare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;1</span></div></td></tr>
         </tbody>
       </table>
     </div>
 
     <div class="lic-block">
-      <div class="lic-vendor-label">Microsoft 365 via Pax8 &mdash; 84 seats</div>
+      <div class="lic-vendor-label">Microsoft 365 via Pax8</div>
       <table class="lic-table">
-        <thead><tr><th>Client</th><th>Plans</th><th style="width:55px;text-align:right">Total</th><th style="width:130px">Scale</th></tr></thead>
+        <thead><tr><th style="width:32%">Client</th><th>Plans &amp; Seat Counts</th></tr></thead>
         <tbody>
-          <tr><td class="lic-client">Shefa Living</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;31</span><span class="lic-plan-chip">Copilot &times;1</span></div></td><td class="lic-total">32</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:100%"></div></div></div></td></tr>
-          <tr><td class="lic-client">CPM</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;15</span><span class="lic-plan-chip">Premium &times;1</span></div></td><td class="lic-total">16</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:50%"></div></div></div></td></tr>
-          <tr><td class="lic-client">Pearl Pointe</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;11</span><span class="lic-plan-chip">Premium &times;2</span></div></td><td class="lic-total">13</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:40.6%"></div></div></div></td></tr>
-          <tr><td class="lic-client">Battery Alliance</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Exch &times;2</span><span class="lic-plan-chip">Basic &times;9</span></div></td><td class="lic-total">11</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:34.4%"></div></div></div></td></tr>
-          <tr><td class="lic-client">Cohen Investments</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;4</span><span class="lic-plan-chip">Exch &times;2</span></div></td><td class="lic-total">6</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:18.8%"></div></div></div></td></tr>
-          <tr><td class="lic-client">Alpha Healthcare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;4</span></div></td><td class="lic-total">4</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:12.5%"></div></div></div></td></tr>
-          <tr><td class="lic-client">The Law Offices of Libby &amp; Nahmias</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Exch &times;1</span></div></td><td class="lic-total">1</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:3.1%"></div></div></div></td></tr>
-          <tr><td class="lic-client">TLC Care Memphis</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Premium &times;1</span></div></td><td class="lic-total">1</td><td><div class="lic-bar-wrap"><div class="lic-bar-bg"><div class="lic-bar-fill green" style="width:3.1%"></div></div></div></td></tr>
+          <tr><td class="lic-client">Shefa Living</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;31</span><span class="lic-plan-chip">Copilot &times;1</span></div></td></tr>
+          <tr><td class="lic-client">CPM</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;15</span><span class="lic-plan-chip">Premium &times;1</span></div></td></tr>
+          <tr><td class="lic-client">Pearl Pointe</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;11</span><span class="lic-plan-chip">Premium &times;2</span></div></td></tr>
+          <tr><td class="lic-client">Battery Alliance</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Exch &times;2</span><span class="lic-plan-chip">Basic &times;9</span></div></td></tr>
+          <tr><td class="lic-client">Cohen Investments</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;4</span><span class="lic-plan-chip">Exch &times;2</span></div></td></tr>
+          <tr><td class="lic-client">Alpha Healthcare</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Std &times;4</span></div></td></tr>
+          <tr><td class="lic-client">The Law Offices of Libby &amp; Nahmias</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Exch &times;1</span></div></td></tr>
+          <tr><td class="lic-client">TLC Care Memphis</td><td><div class="lic-plan-chips"><span class="lic-plan-chip">Premium &times;1</span></div></td></tr>
         </tbody>
       </table>
     </div>
